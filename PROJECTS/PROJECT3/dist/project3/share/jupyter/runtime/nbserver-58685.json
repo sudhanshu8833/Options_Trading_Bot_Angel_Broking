@@ -1,0 +1,12 @@
+{
+  "base_url": "/",
+  "hostname": "localhost",
+  "notebook_dir": "/Users/sudhanshu",
+  "password": false,
+  "pid": 58685,
+  "port": 8889,
+  "secure": false,
+  "sock": "",
+  "token": "3f9514329450624868fad097a80b99f2f01eedf7e57abf7a",
+  "url": "http://localhost:8889/"
+}

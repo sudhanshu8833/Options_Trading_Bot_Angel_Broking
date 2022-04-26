@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Financial Analysis</title>
+  <meta name="description" content="Admin, Dashboard, Bootstrap, Bootstrap 4, Angular, AngularJS" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimal-ui" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  {% load staticfiles %}
+  <!-- for ios 7 style, multi-resolution icon of 152x152 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-barstyle" content="black-translucent">
+  <link rel="apple-touch-icon" href="{% static 'user/assets/images/logo.png' %}">
+  <meta name="apple-mobile-web-app-title" content="Flatkit">
+  <!-- for Chrome on Android, multi-resolution icon of 196x196 -->
+  <meta name="mobile-web-app-capable" content="yes">
+  {% comment %}<link rel="shortcut icon" sizes="196x196" href="{% static 'user/assets/images/logo.png' %}">{% endcomment %}
+  {% comment %}<link rel="icon" type="image/png" href="{% static 'landingpage/icon/favicon-32x32.png' %}" sizes="32x32">
+  <link rel="apple-touch-icon" href="{% static 'landingpage/icon/favicon-32x32.png' %}">{% endcomment %}
+  <!-- style -->
+  <link rel="stylesheet" href="{% static 'user/assets/animate.css/animate.min.css' %}" type="text/css" />
+  <link rel="stylesheet" href="{% static 'user/assets/glyphicons/glyphicons.css' %}" type="text/css" />
+  <link rel="stylesheet" href="{% static 'user/assets/font-awesome/css/font-awesome.min.css' %}" type="text/css" />
+  <link rel="stylesheet" href="{% static 'user/assets/material-design-icons/material-design-icons.css' %}" type="text/css" />
+
+  <link rel="stylesheet" href="{% static 'user/assets/bootstrap/dist/css/bootstrap.min.css' %}" type="text/css" />
+  <!-- build:css ../assets/styles/app.min.css -->
+  <link rel="stylesheet" href="{% static 'user/assets/styles/app.css' %}" type="text/css" />
+  <!-- endbuild -->
+  <link rel="stylesheet" href="{% static 'user/assets/styles/font.css' %}" type="text/css" />
+  {% comment %}<link rel="stylesheet" type="text/css" href="{% static 'user/libs/jquery/footable/css/footable.core.css' %}"  />{% endcomment %}
+</head>
+<body class="dark">
+  <div class="app" id="app">
+
+<!-- ############ LAYOUT START-->
+
+  <!-- aside -->
+  <div id="aside" class="app-aside modal nav-dropdown">
+  	<!-- fluid app aside -->
+    <div class="left navside dark dk" data-layout="column">
+  	  <div class="navbar no-radius">
+        <!-- brand -->
+        <a class="navbar-brand">
+        	{% comment %}<div ui-include="'../static/user/assets/images/logo.svg'"></div>{% endcomment %}
+        	{% comment %}<img src="../static/landingpage/img/logo.png" alt="." >{% endcomment %}
+        	<span class="hidden-folded inline text-warn">Financial Analysis</span>
+        </a>
+        <!-- / brand -->
+      </div>
+      <div class="hide-scroll" data-flex>
+          <nav class="scroll nav-light">
+              <ul class="nav" ui-nav>
+                {% comment %}<li class="nav-header hidden-folded">
+                  <small class="text-muted">Main</small>
+                </li>{% endcomment %}
+      <!-- analysis -->
+                <li>
+                  <a href="{% url 'analysis' %}" >
+                    <div class="row">
+                      <span class="nav-icon fa fa-dashboard" style="margin-left: 10px">
+                      </span>
+                      <span class="nav-text">Analysis</span>
+                    </div>
+                  </a>
+                </li>
+
+      <!-- testing -->
+                <li>
+                  <a href="{% url 'testing' %}">
+                    <div class="row">
+                      <span class="nav-icon fa fa-database" style="margin-left: 10px">
+                      </span>
+                      <span class="nav-text">Testing</span>
+                    </div>
+                  </a>
+                </li>
+      <!-- AI part -->
+                <li>
+                  <a href="/investment">
+                    <div class="row">
+                      <span class="nav-icon fa fa-bars" style="margin-left: 10px">
+                      </span>
+                      <span class="nav-text">Investment</span>
+                    </div>
+                  </a>
+                </li>
+      <!-- New Algorithm-->
+                <li>
+                  <a href="{% url 'new_analysis' %}" >
+                    <div class="row">
+                      <span class="nav-icon fa fa-dashboard" style="margin-left: 10px">
+                      </span>
+                      <span class="nav-text">New Algorithm</span>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+          </nav>
+      </div>
+
+    </div>
+  </div>
+  <!-- / -->
+
+  <!-- content -->
+  <div id="content" class="app-content box-shadow-z0" role="main">
+    <div class="app-header white box-shadow">
+        <div class="navbar navbar-toggleable-sm flex-row align-items-center">
+
+            <a data-toggle="modal" data-target="#aside" class="hidden-lg-up mr-3">
+              <i class="material-icons">&#xe5d2;</i>
+            </a>
+            <div class="mb-0 h5 no-wrap" ng-bind="$state.current.data.title" id="pageTitle"></div>
+
+            <!-- navbar collapse -->
+            <div class="collapse navbar-collapse" id="collapse">
+
+              <ul class="nav navbar-nav mr-auto">
+                <li class="nav-item dropdown">
+                    <h3 style="margin-bottom: 0px">Test Investment</h3>
+                </li>
+              </ul>
+              <div ui-include="{% static 'user/views/blocks/navbar.form.html' %}"></div>
+              <!-- / -->
+            </div>
+
+        </div>
+    </div>
+    <div class="app-footer">
+      <div class="p-2 text-xs">
+        <div class="pull-right text-muted py-1">
+          &copy; <strong>Financial Analysis</strong>
+        </div>
+      </div>
+    </div>
+    <div ui-view class="app-body" id="view">
+    <div class="padding">
+
+	<form action="" method="POST">{% csrf_token %}
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="box" id="chart" style="height: 400px; min-width: 310px; display: none">
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h2>Setting Form</h2>
+                        <small>Select segment parameters and investment parameters</small>
+
+                    </div>
+                    <div class="m-0" style="border-bottom: 3px solid rgba(120, 130, 140, 0.13)"></div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-sm-6 p-t-md">
+                                <div class="box">
+                                    <div class="box-header">
+                                        <h2>Segment Settings</h2>
+                                    </div>
+                                    <div class="box-divider m-0"></div>
+                                    <div class="box-body">
+                                        <form role="form">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 form-control-label">Start Date</label>
+                                                <div class="col-sm-9">
+                                                    <div class="form-group">
+                                                        <div class='input-group date' ui-jp="datetimepicker" ui-options="{
+                                                            format: 'M/D/YYYY',
+                                                                icons: {
+                                                                    time: 'fa fa-clock-o',
+                                                                    date: 'fa fa-calendar',
+                                                                    up: 'fa fa-chevron-up',
+                                                                    down: 'fa fa-chevron-down',
+                                                                    previous: 'fa fa-chevron-left',
+                                                                    next: 'fa fa-chevron-right',
+                                                                    today: 'fa fa-screenshot',
+                                                                    clear: 'fa fa-trash',
+                                                                    close: 'fa fa-remove'
+                                                                }
+                                                        }">
+                                                            <input type='text' class="form-control" name="start_date" id="start_date" required>
+                                                            <span class="input-group-addon">
+                                                                <span class="fa fa-calendar"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 form-control-label">Interval</label>
+                                                <div class="col-sm-9 row">
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" id="period" name="period" placeholder="Enter interval value" required>
+                                                    </div>
+                                                    <label class="col-sm-3 form-control-label">( Days )</label>
+                                                    {% comment %}<div class="col-sm-6">
+                                                        <select required style="background-color: rgb(72,87,103);" class="text-white form-control c-select">
+                                                            <option>Please select unit</option>
+                                                            <option value="week">Week</option>
+                                                            <option value="month">Month</option>
+                                                        </select>
+                                                    </div>{% endcomment %}
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 form-control-label">Minimum Rise</label>
+                                                <div class="col-sm-9 row">
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" id="min_raise" name="min_raise" placeholder="Enter percentage value" required>
+                                                    </div>
+                                                    <label class="col-sm-3 form-control-label">( % )</label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 form-control-label">Minimum Fall</label>
+                                                <div class="col-sm-9 row">
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" id="min_fall" name="min_fall" placeholder="Enter percentage value" required>
+                                                    </div>
+                                                    <label class="col-sm-3 form-control-label">( % )</label>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 p-t-md">
+                                <div class="box">
+                                    <div class="box-header">
+                                        <h2>Investment Settings </h2>
+                                    </div>
+                                    <div class="box-divider m-0"></div>
+                                    <div class="box-body">
+                                        <form role="form">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 form-control-label">Initial Capital</label>
+                                                <div class="col-sm-9 row">
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" id="init_capital" name="init_capital" placeholder="Initial Cash Amount" required>
+                                                    </div>
+                                                    <label class="col-sm-3 form-control-label">( USD )</label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 form-control-label">Cash Investment</label>
+                                                <div class="col-sm-9 row">
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" id="cash_amount" name="cash_amount" placeholder="Cash Amount for Investment" required>
+                                                    </div>
+                                                    <label class="col-sm-3 form-control-label">( % )</label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 form-control-label">Stock Investment</label>
+                                                <div class="col-sm-9 row">
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" id="stock_amount" name="cash_amount" placeholder="Stock Amount for Investment" required>
+                                                    </div>
+                                                    <label class="col-sm-3 form-control-label">( % )</label>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <p>
+                                        <a name="test_investment" id="test_investment" class="btn btn--center primary btn-lg" style="padding-left: 50px;padding-right: 50px">Test Investment</a>
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="m-0" style="border-bottom: 3px solid rgba(120, 130, 140, 0.13)"></div>
+                    <div id="capital_label" class="box-footer" style="display: none;">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <h5 class="text-warn">Total Capital:</h5>
+                            </div>
+                            <div id="total_capital" class="col-sm-3">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+    <div class="box" style="display: none" id="result_table">
+    <div class="box-header">
+      <h2>Test Investment Result </h2>
+      {% comment %}<small>Make HTML tables on smaller devices look awesome</small>{% endcomment %}
+    </div>
+    <div id="table_data">
+      <table class="table m-b-none" ui-jp="footable" data-filter="#filter" data-page-size="10" >
+        <thead>
+          <tr id="table_header">
+              <th>Segment</th>
+              <th>Date</th>
+              <th>Price</th>
+              <th>Order</th>
+              <th>Amount</th>
+              <th>Cash Capital</th>
+              <th>Stock Capital</th>
+              <th>Total Capital</th>
+          </tr>
+        </thead>
+        <tbody id="table_body">
+
+        </tbody>
+        <tfoot class="hide-if-no-paging">
+          <tr>
+              <td colspan="5" class="text-center">
+                  <ul class="pagination"></ul>
+              </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    </div>
+    </div>
+
+<!-- ############ PAGE END-->
+
+    </div>
+  </div>
+
+  </div>
+
+<!-- build:js scripts/app.html.js -->
+<!-- jQuery -->
+  <script src="{% static 'user/libs/jquery/jquery/dist/jquery.js' %}"></script>
+<!-- Bootstrap -->
+  <script src="{% static 'user/libs/jquery/tether/dist/js/tether.min.js' %}"></script>
+  <script src="{% static 'user/libs/jquery/bootstrap/dist/js/bootstrap.js' %}"></script>
+<!-- core -->
+  <script src="{% static 'user/libs/jquery/underscore/underscore-min.js' %}"></script>
+  <script src="{% static 'user/libs/jquery/jQuery-Storage-API/jquery.storageapi.min.js' %}"></script>
+  <script src="{% static 'user/libs/jquery/PACE/pace.min.js' %}"></script>
+
+  <script src="{% static 'user/scripts/config.lazyload.js' %}"></script>
+
+  <script src="{% static 'user/scripts/palette.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-load.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-jp.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-include.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-device.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-form.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-nav.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-screenfull.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-scroll-to.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-toggle-class.js' %}"></script>
+
+  <script src="{% static 'user/scripts/app.js' %}"></script>
+
+  <!-- ajax -->
+  <script src="{% static 'user/libs/jquery/jquery-pjax/jquery.pjax.js' %}"></script>
+  <script src="{% static 'user/scripts/ajax.js' %}"></script>
+<!-- endbuild -->
+
+  <script src="https://code.highcharts.com/stock/highstock.js"></script>
+  <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+  <script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
+<script>
+    $(document).ready(function(){
+        $("#test_investment").on('click', function(){
+            var start_date = $("#start_date").val();
+            var period = $("#period").val();
+            var min_raise = $("#min_raise").val();
+            var min_fall = $("#min_fall").val();
+            var init_capital = $("#init_capital").val();
+            var cash_amount = $("#cash_amount").val();
+            var stock_amount = $("#stock_amount").val();
+            var csrf_token = $('input[name=csrfmiddlewaretoken]').val();
+
+            $.ajax({
+                method: "POST",
+                url: "/test_investment/",
+                data:{start_date: start_date, period: period, min_raise: min_raise, min_fall: min_fall, init_capital: init_capital, cash_amount: cash_amount, stock_amount: stock_amount, csrfmiddlewaretoken: csrf_token},
+                success: function(result){
+                    //console.log("success ajax");
+                    var result_data = result['result_data'];
+                    var graph_data = result['graph_data'];
+                    var price_data = result['price_data'];
+                    var date_data = result['date_data'];
+                    var capital = result['last_data'][4];
+
+                    var body_str = "";
+                    var capital_str = "<h4 class='text-warn'>" + capital + " (USD)</h4>";
+
+                    for(var i=0; i<result_data.length; i++){
+
+                        if(result_data[i][0] == "Bull"){
+                            if (i % 2 == 0){
+                                body_str += "<tr class='text-danger footable-even' style='display: table-row;'><td class='footable-visible footable-first-column'>Bull Period</td><td class='footable-visible'>" + result_data[i][1] + "</td><td class='footable-visible'>" + result_data[i][2] + "</td><td class='footable-visible'>" + result_data[i][3] + "</td><td class='footable-visible'>" + result_data[i][4] + "</td><td class='footable-visible'>" + result_data[i][5] + "</td><td class='footable-visible'>" + result_data[i][6] + "</td><td class='footable-visible footable-last-column'>" + result_data[i][7] + "</td></tr>";
+                            }
+                            else{
+                                body_str += "<tr class='text-danger footable-odd' style='display: table-row;'><td class='footable-visible footable-first-column'>Bull Period</td><td class='footable-visible'>" + result_data[i][1] + "</td><td class='footable-visible'>" + result_data[i][2] + "</td><td class='footable-visible'>" + result_data[i][3] + "</td><td class='footable-visible'>" + result_data[i][4] + "</td><td class='footable-visible'>" + result_data[i][5] + "</td><td class='footable-visible'>" + result_data[i][6] + "</td><td class='footable-visible footable-last-column'>" + result_data[i][7] + "</td></tr>";
+                            }
+                        }
+                        else if(result_data[i][0] == "Bear"){
+                            if(i % 2 == 0){
+                                body_str += "<tr class='text-info footable-even' style='display: table-row;'><td class='footable-visible footable-first-column'>Bear Period</td><td class='footable-visible'>" + result_data[i][1] + "</td><td class='footable-visible'>" + result_data[i][2] + "</td><td class='footable-visible'>" + result_data[i][3] + "</td><td class='footable-visible'>" + result_data[i][4] + "</td><td class='footable-visible'>" + result_data[i][5] + "</td><td class='footable-visible'>" + result_data[i][6] + "</td><td class='footable-visible footable-last-column'>" + result_data[i][7] + "</td></tr>";
+                            }
+                            else {
+                                body_str += "<tr class='text-info footable-odd' style='display: table-row;'><td class='footable-visible footable-first-column'>Bear Period</td><td class='footable-visible'>" + result_data[i][1] + "</td><td class='footable-visible'>" + result_data[i][2] + "</td><td class='footable-visible'>" + result_data[i][3] + "</td><td class='footable-visible'>" + result_data[i][4] + "</td><td class='footable-visible'>" + result_data[i][5] + "</td><td class='footable-visible'>" + result_data[i][6] + "</td><td class='footable-visible footable-last-column'>" + result_data[i][7] + "</td></tr>";
+                            }
+                        }
+                    }
+
+                    $("#chart").show();
+                    createChart(graph_data, date_data);
+                    //$("#table_header").html(header_str);
+                    $("#table_body").html(body_str);
+                    $("#total_capital").html(capital_str);
+                    //$("#table_data").html(table_str);
+                    $("#result_table").show();
+                    $("#capital_label").show();
+                }
+            });
+        });
+
+    });
+  </script>
+<script>
+function createChart(data_list, date_data) {
+
+  Highcharts.stockChart('chart', {
+
+    rangeSelector: {
+      enabled: false,
+
+    },
+    exporting: {
+      enabled: false
+    },
+    yAxis: {
+        labels: {
+            enabled: false
+        },
+      {% comment %}labels: {
+        formatter: function () {
+          //return (this.value > 0 ? ' + ' : '') + this.value + '%';
+            return this.value
+        },
+        style: {
+            color: '#000000',
+            fontSize: "15px"
+        },
+      },{% endcomment %}
+      plotLines: [{
+        value: 0,
+        width: 2,
+        color: 'silver'
+      }]
+    },
+    xAxis: {
+      labels: {
+          //enabled: false
+        formatter: function(){
+            return date_data[this.value];
+        },
+        style: {
+            color: '#000000',
+            fontSize: "15px"
+        },
+        maxStaggerLines: 3
+      }
+    },
+    plotOptions: {
+      series: {
+        compare: 'percent',
+        showInNavigator: true
+      }
+    },
+
+    tooltip: {
+      //pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change})<br/>',
+      valueDecimals: 2,
+      //split: true
+    },
+    navigator: {
+      xAxis: {
+        labels: {
+          formatter: function(){
+            return date_data[this.value];
+          },
+          style: {
+            color: '#000000',
+            fontSize: "15px"
+        },
+        }
+      }
+    },
+    series: data_list
+    //series: seriesOptions
+  });
+
+}
+
+</script>
+</body>
+</html>

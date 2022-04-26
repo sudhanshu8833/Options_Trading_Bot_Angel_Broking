@@ -1,0 +1,10 @@
+parameters,value
+binance_api_key,6Kl8M87fbW8wYUmk67pe3fcDBJS6JQYd9FTbi6nBBFwfDbG4dShSr91D99jetSs7
+binance_api_secret_key,IVpO02GvIlbwMOUTaNug730lzwgUugxEvprhTreY91IkJvNkWSscbWPySwYRFJTz
+take_profit_precentage,2.5
+stop_loss_precentage,5
+atr,6
+factor,2
+quantity,0.001
+symbol_binance,BTCUSDT
+binance_X,20

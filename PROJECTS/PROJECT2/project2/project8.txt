@@ -1,0 +1,148 @@
+#here we initialize all the variables
+
+def initialize(state):
+    state.number_offset_trades = 0
+    state.max_inc = 0
+    state.min_drop = 0
+    state.start = 0
+    state.entry_price=0
+    state.exit_price=0
+    state.max_inc=0
+    state.max_inc_last=0
+    state.max_drop=0
+    state.max_drop_last=0
+
+
+@schedule(interval="1h", symbol="LTCETH")
+def handler(state, data):
+
+    '''
+    1) Set variables
+    '''
+
+#here we set all the variables 
+
+    portfolio = query_portfolio()
+    has_position = has_open_position(data.symbol, include_dust=False)
+    
+    balance_quoted = float(query_balance_free(data.quoted))
+    balance_base = float(query_balance_free(data.base))
+    buy_amount = float(balance_quoted / data.close_last)
+    open_positions = query_open_positions()
+    open_orders = query_open_orders()
+    last_closing_price = float(data.close_last)
+    
+
+    '''
+    2) SELL CODE
+    '''
+    if has_position:
+
+  # when asset_inc value becomes greater then the previous all iteration then again you assign new value to max_inc_last, that value will be present value of asset_inc.
+   # here state.max_in_last and state.max_inc are assigned to be zero initially
+  
+
+        #this part of the code is specifically used for calculation the max_inc for a particular trade
+        if (state.entry_price/last_closing_price -1)>state.max_inc_last:
+            state.max_inc_last=state.entry_price/last_closing_price -1
+            
+        
+
+#here state.entry_price is taken from the BUY CODE
+        if last_closing_price < state.entry_price:
+            print("Selling {} {}@{}".format(data.symbol, balance_base, last_closing_price))
+            close_position(data.symbol)
+
+            state.start=1
+            # here we assign state.max_inc with state.max_inc_last because in the condtions part we have used state.max_inc_last
+            state.max_inc =state.max_inc_last
+            # state.max_inc_last is assigned to be zero, so that it can be used in the next trade for the calculation of max_inc
+            state.max_inc_last=0
+            
+            state.exit_price=last_closing_price
+        
+# following if statement is written contaning max_inc + asset_inc>=20%
+        if last_closing_price>state.entry_price and (state.entry_price/last_closing_price -1) + state.max_inc>=.20:
+            print("Selling {} {}@{}".format(data.symbol, balance_base, last_closing_price))
+            close_position(data.symbol)
+  
+            state.max_inc=state.max_inc_last
+            state.max_inc_last=0
+            state.exit_price=last_closing_price
+   
+            state.start=1
+            
+
+
+    '''
+    3) BUY CODE
+    '''
+
+
+
+    if not has_position:
+
+#after the first position is squared off it will go in this block of code
+
+        if state.start>0:
+
+            # similar to SELL code here also we are calculating the max_drop for a particular trade.
+            # rest every thing as well works the same as SELL code
+            if (state.exit_price/last_closing_price -1)<state.max_drop_last:
+                state.max_drop_last=state.entry_price/last_closing_price -1
+                
+         
+        
+ #here state.exit_price is taken from the SELL CODE
+            if last_closing_price > state.exit_price:
+                print("Buying {} {}@{}".format(data.symbol, buy_amount, last_closing_price))
+                order_market_amount(symbol=data.symbol, amount=buy_amount)
+                state.max_drop=state.max_drop_last
+                state.max_drop_last=0
+                state.entry_price=last_closing_price
+            
+
+            if last_closing_price<state.exit_price and (state.exit_price/last_closing_price -1) + state.max_drop<= -.20:
+                print("Buying {} {}@{}".format(data.symbol, buy_amount, last_closing_price))
+                order_market_amount(symbol=data.symbol, amount=buy_amount)
+                state.max_drop=state.max_drop_last
+                state.max_drop_last=0
+                state.entry_price=last_closing_price
+
+           
+
+
+# because we haven’t given any buy order so, first the code will come here to first buy a order...
+        if state.start==0:
+
+            print("Buying  start {} {}@{}".format(data.symbol, buy_amount, last_closing_price))
+            order_market_amount(symbol=data.symbol, amount=buy_amount)
+
+    #here state.entry_price sets a the entry price in that particular stock
+            state.entry_price=last_closing_price
+            
+            
+
+            
+            
+
+    '''
+    4) Check strategy profitability
+        > print information profitability on every offsetting trade
+    '''
+    
+    if state.number_offset_trades < portfolio.number_of_offsetting_trades:
+        
+        pnl = query_portfolio_pnl()
+        print("-------")
+        print("Accumulated Pnl of Strategy: {}".format(pnl))
+        
+        offset_trades = portfolio.number_of_offsetting_trades
+        number_winners = portfolio.number_of_winning_trades
+        print("Number of winning trades {}/{}.".format(number_winners,offset_trades))
+        print("Best trade Return : {:.2%}".format(portfolio.best_trade_return))
+        print("Worst trade Return : {:.2%}".format(portfolio.worst_trade_return))
+        print("Average Profit per Winning Trade : {:.2f}".format(portfolio.average_profit_per_winning_trade))
+        print("Average Loss per Losing Trade : {:.2f}".format(portfolio.average_loss_per_losing_trade))
+        # reset number offset trades
+        state.number_offset_trades = portfolio.number_of_offsetting_trades

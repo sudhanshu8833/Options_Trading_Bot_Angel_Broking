@@ -1,0 +1,2 @@
+S.No.,instrument symbol,scrip code,option instrument symbol,option scrip code,stop loss,take profit,margin,stop loss recover,small supertrend atr,small supertrend factor,big supertrend atr,big supertrend factor,api key,user name,password
+0,INFY,1594,,,0.5,1,,yes,5,1,21,6,,,

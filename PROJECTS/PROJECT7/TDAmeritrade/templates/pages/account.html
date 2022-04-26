@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>TD Amderitrade TradingBot</title>
+  <meta name="description" content="Admin, Dashboard, Bootstrap, Bootstrap 4, Angular, AngularJS" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimal-ui" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  {% load static %}
+  <!-- for ios 7 style, multi-resolution icon of 152x152 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-barstyle" content="black-translucent">
+  <link rel="apple-touch-icon" href="{% static 'user/assets/images/logo.png' %}">
+  <meta name="apple-mobile-web-app-title" content="Flatkit">
+  <!-- for Chrome on Android, multi-resolution icon of 196x196 -->
+  <meta name="mobile-web-app-capable" content="yes">
+  {% comment %}<link rel="shortcut icon" sizes="196x196" href="{% static 'user/assets/images/logo.png' %}">{% endcomment %}
+  {% comment %}<link rel="icon" type="image/png" href="{% static 'landingpage/icon/favicon-32x32.png' %}" sizes="32x32">
+  <link rel="apple-touch-icon" href="{% static 'landingpage/icon/favicon-32x32.png' %}">{% endcomment %}
+  <!-- style -->
+  <link rel="stylesheet" href="{% static 'user/assets/animate.css/animate.min.css' %}" type="text/css" />
+  <link rel="stylesheet" href="{% static 'user/assets/glyphicons/glyphicons.css' %}" type="text/css" />
+  <link rel="stylesheet" href="{% static 'user/assets/font-awesome/css/font-awesome.min.css' %}" type="text/css" />
+  <link rel="stylesheet" href="{% static 'user/assets/material-design-icons/material-design-icons.css' %}" type="text/css" />
+
+  <link rel="stylesheet" href="{% static 'user/assets/bootstrap/dist/css/bootstrap.min.css' %}" type="text/css" />
+  <!-- build:css ../assets/styles/app.min.css -->
+  <link rel="stylesheet" href="{% static 'user/assets/styles/app.css' %}" type="text/css" />
+  <!-- endbuild -->
+  <link rel="stylesheet" href="{% static 'user/assets/styles/font.css' %}" type="text/css" />
+  {% comment %}<link rel="stylesheet" type="text/css" href="{% static 'user/libs/jquery/footable/css/footable.core.css' %}"  />{% endcomment %}
+</head>
+<body class="dark">
+  <div class="app" id="app">
+
+<!-- ############ LAYOUT START-->
+
+  <!-- aside -->
+  {% include 'pages/aside.html' %}
+  <!-- / -->
+
+  <!-- content -->
+  <div id="content" class="app-content box-shadow-z0" role="main">
+    <div class="app-header white box-shadow">
+        <div class="navbar navbar-toggleable-sm flex-row align-items-center">
+            <!-- Open side - Naviation on mobile -->
+            <a data-toggle="modal" data-target="#aside" class="hidden-lg-up mr-3">
+              <i class="material-icons">&#xe5d2;</i>
+            </a>
+            <!-- / -->
+
+            <!-- Page title - Bind to $state's title -->
+            <div class="mb-0 h5 no-wrap" ng-bind="$state.current.data.title" id="pageTitle"></div>
+
+            <!-- navbar collapse -->
+            <div class="collapse navbar-collapse" id="collapse">
+
+              <ul class="nav navbar-nav mr-auto">
+                <li class="nav-item dropdown">
+                    <h3 style="margin-bottom: 0px">Account</h3>
+                </li>
+              </ul>
+              <div ui-include="{% static 'user/views/blocks/navbar.form.html' %}"></div>
+              <!-- / -->
+            </div>
+
+        </div>
+    </div>
+    <div class="app-footer">
+      <div class="p-2 text-xs">
+        <div class="pull-right text-muted py-1">
+          &copy; <strong>TD Ameritrade TradingBot</strong>
+        </div>
+      </div>
+    </div>
+    <div ui-view class="app-body" id="view">
+
+<!-- ############ PAGE START-->
+    <div class="padding">
+      {% include 'pages/message.html' %}
+      <div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h2>Account Settings</h2>
+                    </div>
+                    <div class="m-0" style="border-bottom: 3px solid rgba(120, 130, 140, 0.13)"></div>
+                    <div class="box-body">
+                        <form action="" method="post">{% csrf_token %}
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="b-b b-primary nav-active-primary">
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" href data-toggle="tab" data-target="#tab_td_account">TD Ameritrade</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-content p-a m-b-md">
+                                    <div class="tab-pane active" id="tab_tx_account">
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 form-control-label" style="text-align: right">Refresh Token</label>
+                                            <div class="col-sm-10">
+                                                <textarea id="td_refresh_token" name="td_refresh_token" class="form-control" rows="7" required>{{ account_info.td_refresh_token }}</textarea>
+                                                <h6 class="text-muted">You can use refresh token for 90 days. You must get refresh token again.</h6>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 form-control-label" style="text-align: right">Consumer Key</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" id="td_consumer_key" name="td_consumer_key" class="form-control" value="{{ account_info.td_consumer_key }}" required/>
+                                                <h6 class="text-muted">You can get Consumer Key after create TD App</h6>
+                                            </div>
+                                        </div>
+                                        <div class="text-right">
+                                            <a id="td_account_update" name="td_account_update" type="button" class="btn primary">Save</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+      </div>
+    </div>
+
+
+<!-- ############ PAGE END-->
+
+    </div>
+  </div>
+
+  </div>
+
+<!-- build:js scripts/app.html.js -->
+<!-- jQuery -->
+  <script src="{% static 'user/libs/jquery/jquery/dist/jquery.js' %}"></script>
+<!-- Bootstrap -->
+  <script src="{% static 'user/libs/jquery/tether/dist/js/tether.min.js' %}"></script>
+  <script src="{% static 'user/libs/jquery/bootstrap/dist/js/bootstrap.js' %}"></script>
+<!-- core -->
+  <script src="{% static 'user/libs/jquery/underscore/underscore-min.js' %}"></script>
+  <script src="{% static 'user/libs/jquery/jQuery-Storage-API/jquery.storageapi.min.js' %}"></script>
+  <script src="{% static 'user/libs/jquery/PACE/pace.min.js' %}"></script>
+
+  <script src="{% static 'user/scripts/config.lazyload.js' %}"></script>
+
+  <script src="{% static 'user/scripts/palette.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-load.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-jp.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-include.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-device.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-form.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-nav.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-screenfull.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-scroll-to.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-toggle-class.js' %}"></script>
+
+  <script src="{% static 'user/scripts/app.js' %}"></script>
+
+  <!-- ajax -->
+  <script src="{% static 'user/libs/jquery/jquery-pjax/jquery.pjax.js' %}"></script>
+  <script src="{% static 'user/scripts/ajax.js' %}"></script>
+<!-- endbuild -->
+
+  <script src="https://code.highcharts.com/stock/highstock.js"></script>
+  <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+  <script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
+<script>
+    $(document).ready(function(){
+        $('#td_account_update').on("click", function(e){
+            e.preventDefault();
+            var token = $('#td_refresh_token').val();
+            var account_key = $('#td_consumer_key').val();
+            var csrf_token = $('input[name=csrfmiddlewaretoken]').val();
+            $.ajax({
+                method: "POST",
+                url: "/update_broker_info/",
+                data: {refresh_token: token, consumer_key: account_key, csrfmiddlewaretoken: csrf_token},
+                success: function (result) {
+                    location.reload();
+                }
+            });
+        });
+    });
+</script>
+
+ <script type="text/javascript">
+function edit_user(id)   {
+    var csrf_token = $('input[name=csrfmiddlewaretoken]').val();
+    $.ajax({
+        method: "POST",
+        url: "/get_user_info/",
+        data: {id: id, csrfmiddlewaretoken: csrf_token},
+        success: function (result) {
+            $('#edit_id').val(result.user['id']);
+            $('#edit_sure_name').val(result.user['sure_name']);
+            $('#edit_user_id').val(result.user['user_id']);
+            $('#edit_password').val(result.user['password']);
+            $('#edit_phone_number').val(result.user['phone_number']);
+            $('#edit_status').val(result.user['status']);
+            $('#edit_expire_date').val(result.user['expire_date']);
+            $('#edit_saxo_token').val(result.user['saxo_token']);
+            $('#edit_ib_user_name').val(result.user['ib_user_name']);
+            $('#edit_ib_id').val(result.user['ib_id']);
+            $('#edit_ib_port').val(result.user['ib_port']);
+            $('#edit_user').show();
+        }
+    });
+}
+</script></body>
+</html>

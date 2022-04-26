@@ -1,0 +1,12 @@
+{
+  "base_url": "/",
+  "hostname": "localhost",
+  "notebook_dir": "/Users/sudhanshu/Desktop/algo-trading",
+  "password": false,
+  "pid": 89180,
+  "port": 8888,
+  "secure": false,
+  "sock": "",
+  "token": "a584abaaf344755dbc1432c65aded94c3232a3022b9f3cde",
+  "url": "http://localhost:8888/"
+}

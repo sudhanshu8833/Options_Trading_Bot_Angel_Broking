@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>TD Amderitrade TradingBot</title>
+  <meta name="description" content="Admin, Dashboard, Bootstrap, Bootstrap 4, Angular, AngularJS" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimal-ui" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  {% load static %}
+  <!-- for ios 7 style, multi-resolution icon of 152x152 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-barstyle" content="black-translucent">
+  <link rel="apple-touch-icon" href="{% static 'user/assets/images/logo.png' %}">
+  <meta name="apple-mobile-web-app-title" content="Flatkit">
+  <!-- for Chrome on Android, multi-resolution icon of 196x196 -->
+  <meta name="mobile-web-app-capable" content="yes">
+  {% comment %}<link rel="shortcut icon" sizes="196x196" href="{% static 'user/assets/images/logo.png' %}">{% endcomment %}
+  {% comment %}<link rel="icon" type="image/png" href="{% static 'landingpage/icon/favicon-32x32.png' %}" sizes="32x32">
+  <link rel="apple-touch-icon" href="{% static 'landingpage/icon/favicon-32x32.png' %}">{% endcomment %}
+  <!-- style -->
+  <link rel="stylesheet" href="{% static 'user/assets/animate.css/animate.min.css' %}" type="text/css" />
+  <link rel="stylesheet" href="{% static 'user/assets/glyphicons/glyphicons.css' %}" type="text/css" />
+  <link rel="stylesheet" href="{% static 'user/assets/font-awesome/css/font-awesome.min.css' %}" type="text/css" />
+  <link rel="stylesheet" href="{% static 'user/assets/material-design-icons/material-design-icons.css' %}" type="text/css" />
+
+  <link rel="stylesheet" href="{% static 'user/assets/bootstrap/dist/css/bootstrap.min.css' %}" type="text/css" />
+  <!-- build:css ../assets/styles/app.min.css -->
+  <link rel="stylesheet" href="{% static 'user/assets/styles/app.css' %}" type="text/css" />
+  <!-- endbuild -->
+  <link rel="stylesheet" href="{% static 'user/assets/styles/font.css' %}" type="text/css" />
+  {% comment %}<link rel="stylesheet" type="text/css" href="{% static 'user/libs/jquery/footable/css/footable.core.css' %}"  />{% endcomment %}
+</head>
+<body class="dark">
+  <div class="app" id="app">
+
+<!-- ############ LAYOUT START-->
+
+  <!-- aside -->
+  <div id="aside" class="app-aside modal nav-dropdown">
+  	<!-- fluid app aside -->
+    <div class="left navside dark dk" data-layout="column">
+  	  <div class="navbar no-radius">
+        <!-- brand -->
+        <a class="navbar-brand">
+        	{% comment %}<div ui-include="'../static/user/assets/images/logo.svg'"></div>{% endcomment %}
+        	{% comment %}<img src="../static/landingpage/img/logo.png" alt="." >{% endcomment %}
+        	<span class="hidden-folded inline text-warn">TD TradingBot</span>
+        </a>
+        <!-- / brand -->
+      </div>
+      <div class="hide-scroll" data-flex>
+          <nav class="scroll nav-light">
+              <ul class="nav" ui-nav>
+                {% comment %}<li class="nav-header hidden-folded">
+                  <small class="text-muted">Main</small>
+                </li>{% endcomment %}
+      <!-- analysis -->
+                <li>
+                  <a href="{% url 'dashboard' %}" >
+                    <div class="row">
+                      <span class="nav-icon fa fa-dashboard" style="margin-left: 10px">
+                      </span>
+                      <span class="nav-text">Dashboard</span>
+                    </div>
+                  </a>
+                </li>
+
+      <!-- testing -->
+                <li>
+                  <a href="{% url 'strategy' %}">
+                    <div class="row">
+                      <span class="nav-icon fa fa-database" style="margin-left: 10px">
+                      </span>
+                      <span class="nav-text">Strategy</span>
+                    </div>
+                  </a>
+                </li>
+      <!-- Account -->
+                <li>
+                  <a href="{% url 'account' %}">
+                    <div class="row">
+                      <span class="nav-icon fa fa-database" style="margin-left: 10px">
+                      </span>
+                      <span class="nav-text">Account</span>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+          </nav>
+      </div>
+
+    </div>
+  </div>
+  <!-- / -->
+  
+  <!-- content -->
+  <div id="content" class="app-content box-shadow-z0" role="main">
+    <div class="app-header white box-shadow">
+        <div class="navbar navbar-toggleable-sm flex-row align-items-center">
+
+            <a data-toggle="modal" data-target="#aside" class="hidden-lg-up mr-3">
+              <i class="material-icons">&#xe5d2;</i>
+            </a>
+            <div class="mb-0 h5 no-wrap" ng-bind="$state.current.data.title" id="pageTitle"></div>
+        
+            <!-- navbar collapse -->
+            <div class="collapse navbar-collapse" id="collapse">
+
+              <ul class="nav navbar-nav mr-auto">
+                <li class="nav-item dropdown">
+                    <h3 style="margin-bottom: 0px">Dashboard</h3>
+                </li>
+              </ul>
+              <div ui-include="{% static 'user/views/blocks/navbar.form.html' %}"></div>
+              <!-- / -->
+            </div>
+
+        </div>
+    </div>
+    <div class="app-footer">
+      <div class="p-2 text-xs">
+        <div class="pull-right text-muted py-1">
+          &copy; <strong>TD Ameritrade TradingBot</strong>
+        </div>
+      </div>
+    </div>
+    <div ui-view class="app-body" id="view">
+
+<!-- ############ PAGE START-->
+    <div class="padding">
+      <div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h2>Bot List</h2>
+                    </div>
+                    <div class="m-0" style="border-bottom: 3px solid rgba(120, 130, 140, 0.13)"></div>
+                    <div class="box-body">
+                        <form action="" method="post">{% csrf_token %}
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="b-b b-primary nav-active-primary">
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href data-toggle="tab" data-target="#tab1">All Bot</a>
+                                        </li>
+                                        <li class="nav-item dropdown" style="position: absolute; right: 70px">
+                                            <a class="nav-link" href data-toggle="modal" data-target="#add_bot">
+                                                <i class="fa fa-fw fa-plus text-muted"></i>
+                                                <span>Add Bot</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-content p-a m-b-md">
+                                    <div class="tab-pane active" id="tab1">
+                                        <div class="box">
+                                            <div class="box-body">
+                                                Search: <input id="filter" type="text" class="form-control input-sm w-auto inline m-r"/>
+                                            </div>
+                                            <div>
+                                                <table class="table m-b-none" ui-jp="footable" data-filter="#filter" data-page-size="{{ security_length }}">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Type</th>
+                                                            <th>Security Name</th>
+                                                            <th>Expire Date</th>
+                                                            <th>Days Left</th>
+                                                            <th>Symbol Count</th>
+                                                            <th>View</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% if security_list %}
+                                                        {% for security in security_list %}
+                                                        <tr>
+                                                            <td>{{security.type}}</td>
+                                                            <td>{{ security.name }}</td>
+                                                            <td>{{ security.expire_date }}</td>
+                                                            <td>{{ security.rest_days }}</td>
+                                                            <td>{{ security.symbol_count }}</td>
+                                                            <td>
+                                                                {%  if security.rest_days == "Expired" %}
+                                                                    <a class="label danger" href="#" disabled="disabled">View</a></td>
+                                                                {% else %}
+                                                                    <a class="label primary" href="/dashboard/{{ security.id }}">View</a></td>
+                                                                {% endif %}
+                                                            <td>
+                                                                <a class="label info" href="#" onclick="edit_security({{ security.id }})">Edit</a>
+                                                                <a class="label danger" href="/delete_security/{{ security.id }}">Delete</a>
+                                                            </td>
+                                                        </tr>
+                                                        {% endfor %}
+                                                    {% endif %}
+
+                                                    </tbody>
+                                                    <tfoot class="hide-if-no-paging">
+                                                        <tr>
+                                                            <td colspan="5" class="text-center">
+                                                                <ul class="pagination"></ul>
+                                                            </td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+      </div>
+    </div>
+<!-- .modal -->
+<div id="edit_bot" class="modal black-overlay" data-backdrop="true">
+    <div class="modal-dialog">
+      <div class="modal-content box-shadow-md black lt m-b">
+        <div class="modal-header">
+      	  <div class="col-sm-12 row"  >
+                <div class="col-sm-6">
+                    <h3 class="modal-title">Edit Security</h3>
+                </div>
+                <div class="col-sm-6 text-lg-right m-m">
+                    <a class="text-info " href="{% url 'dashboard' %}"><h6>Back</h6></a>
+                </div>
+            </div>
+        </div>
+        <div class="modal-body p-lg">
+          <form id="edit_security_form" method="post">{% csrf_token %}
+            <input type="hidden" id="edit_id" name="edit_id">
+      <!--   Security Name  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label" style="text-align: right">Security Name</label>
+              <div class="col-sm-8">
+                <input type="text" id="edit_security_name" name="edit_security_name" class="form-control"  required/>
+              </div>
+            </div>
+      <!--  Security Type  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label" style="text-align: right">Security Type</label>
+              <div class="col-sm-8">
+                <select required name="edit_security_type" id="edit_security_type" style="background-color: rgb(72,87,103);" class="form-control">
+                    <option value=""></option>
+                    <option value="STOCK">Stock</option>
+                    <option value="CFD">CFD</option>
+                    <option value="CFD_INDEX">CFD Index</option>
+                    <option value="FOREX">Forex</option>
+                </select>
+              </div>
+            </div>
+      <!--  Expire Date -->
+            <div class="form-group row">
+                <label class="col-sm-4 form-control-label" style="text-align: right">Expire Date</label>
+                <div class="col-sm-8">
+                    <div class="form-group">
+                                                        <div class='input-group date' ui-jp="datetimepicker" ui-options="{
+                                                            format: 'YYYY-M-D',
+                                                                icons: {
+                                                                    time: 'fa fa-clock-o',
+                                                                    date: 'fa fa-calendar',
+                                                                    up: 'fa fa-chevron-up',
+                                                                    down: 'fa fa-chevron-down',
+                                                                    previous: 'fa fa-chevron-left',
+                                                                    next: 'fa fa-chevron-right',
+                                                                    today: 'fa fa-screenshot',
+                                                                    clear: 'fa fa-trash',
+                                                                    close: 'fa fa-remove'
+                                                                }
+                                                        }">
+                                                            <input type='text' class="form-control" name="edit_expire_date" id="edit_expire_date" required/>
+                                                            <span class="input-group-addon">
+                                                                <span class="fa fa-calendar"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                </div>
+            </div>
+      <!--  Number of Bars  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label text-right">Number of Bars</label>
+              <div class="col-sm-8">
+                <input type="text" id="edit_bar_size" name="edit_bar_size" class="form-control"  required/>
+              </div>
+            </div>
+     {% comment %} <!--  Long Min  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label m-m" style="text-align: right">Long Min</label>
+              <div class="range-slider col-sm-8">
+                <input class="range-slider__range" id="edit_long_min1" name="edit_long_min1" value="" type="range" min="0" max="95"/>
+                <span id="edit_long_min2" name="edit_long_min2" class="range-slider__value"></span>
+              </div>
+            </div>
+      <!--  Long Max  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label m-m" style="text-align: right">Long Max</label>
+              <div class="range-slider col-sm-8">
+                <input class="range-slider__range" id="edit_long_max1" name="edit_long_max1" type="range" value="0" min="0" max="95"/>
+                <span id="edit_long_max2" name="edit_long_max2" class="range-slider__value">0</span>
+              </div>
+            </div>
+      <!--  Short Min  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label m-m" style="text-align: right">Short Min</label>
+              <div class="range-slider col-sm-8">
+                <input class="range-slider__range" id="edit_short_min1" name="edit_short_min1" type="range" value="0" min="0" max="95"/>
+                <span id="edit_short_min2" name="edit_short_min2" class="range-slider__value">0</span>
+              </div>
+            </div>
+      <!--  Short Max  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label m-m" style="text-align: right">Short Max</label>
+              <div class="range-slider col-sm-8">
+                <input class="range-slider__range" id="edit_short_max1" name="edit_short_max1" type="range" value="0" min="0" max="95"/>
+                <span id="edit_short_max2" name="edit_short_max2" class="range-slider__value">0</span>
+              </div>
+            </div>
+      <!--  Symbols -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label" style="text-align: right">Symbols</label>
+              <div class="col-sm-8">
+
+                  <select id='edit_symbol_list' multiple>
+                  </select>
+              </div>
+            </div>{% endcomment %}
+      <!--  Button  -->
+            <div class="modal-footer">
+              {% comment %}<button type="button" class="btn white p-x-md" style="background-color: #2e3e4e" data-dismiss="modal">Cancel</button>{% endcomment %}
+              <button type="submit" class="btn white p-x-md" style="background-color: #2e3e4e" >Update</button>
+
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+<div id="add_bot" class="modal black-overlay" data-backdrop="true">
+    <div class="modal-dialog">
+      <div class="modal-content box-shadow-md black lt m-b">
+        <div class="modal-header">
+      	  <h5 class="modal-title">Add Bot</h5>
+        </div>
+        <div class="modal-body p-lg">
+          <form action="{% url 'add_bot' %}" {% comment %}id="add_security_form"{% endcomment %} enctype="multipart/form-data" method="post">{% csrf_token %}
+      <!--   Bot Name  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label" style="text-align: right">Bot Name</label>
+              <div class="col-sm-8">
+                <input type="text" id="bot_name" name="bot_name" class="form-control"  required/>
+              </div>
+            </div>
+      <!--  Strategy  -->
+      <div class="form-group row">
+              <label class="col-sm-4 form-control-label" style="text-align: right">Strategy</label>
+              <div class="col-sm-8">
+                <select required name="strategy" id="strategy" style="background-color: rgb(72,87,103);" class="form-control">
+                </select>
+              </div>
+            </div>
+      <!--  Symbol  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label text-right" >Symbol</label>
+              <div class="col-sm-8 input-group select2-bootstrap-prepend">
+                <select required name="bot_symbol" id="bot_symbol" style="background-color: rgb(72,87,103);" class="form-control select2" multiple multiple ui-jp="select2" ui-options="{theme: 'bootstrap'}">
+                    <option value=""></option>
+                    <option value="dvax">DVAX</option>
+                    <option value="unfi">UNFI</option>
+                    <option value="ds">DS</option>
+                    <option value="abus">ABUS</option>
+                    <option value="coty">COTY</option>
+                </select>
+              </div>
+            </div>
+      {% comment %}<!--  Start Time -->
+            <div class="form-group row">
+                <label class="col-sm-4 form-control-label" style="text-align: right">Start Time</label>
+                <div class="col-sm-8">
+                    <div class="form-group">
+                        <div class='input-group date' ui-jp="datetimepicker" ui-options="{
+                            format: 'LT',
+                            icons: {
+                                time: 'fa fa-clock-o',
+                                date: 'fa fa-calendar',
+                                up: 'fa fa-chevron-up',
+                                down: 'fa fa-chevron-down',
+                                previous: 'fa fa-chevron-left',
+                                next: 'fa fa-chevron-right',
+                                today: 'fa fa-screenshot',
+                                clear: 'fa fa-trash',
+                                close: 'fa fa-remove'
+                            }
+                        }">
+                        <input type='text' class="form-control" name="start_time" id="start_time"/>
+                        <span class="input-group-addon">
+                            <span class="fa fa-calendar"></span>
+                        </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+      <!--  End Time -->
+            <div class="form-group row">
+                <label class="col-sm-4 form-control-label" style="text-align: right">End Date</label>
+                <div class="col-sm-8">
+                    <div class="form-group">
+                        <div class='input-group date' ui-jp="datetimepicker" ui-options="{
+                            format: 'LT',
+                            icons: {
+                                time: 'fa fa-clock-o',
+                                date: 'fa fa-calendar',
+                                up: 'fa fa-chevron-up',
+                                down: 'fa fa-chevron-down',
+                                previous: 'fa fa-chevron-left',
+                                next: 'fa fa-chevron-right',
+                                today: 'fa fa-screenshot',
+                                clear: 'fa fa-trash',
+                                close: 'fa fa-remove'
+                            }
+                        }">
+                        <input type='text' class="form-control" name="end_time" id="end_time"/>
+                        <span class="input-group-addon">
+                            <span class="fa fa-calendar"></span>
+                        </span>
+                        </div>
+                    </div>
+                </div>
+            </div>{% endcomment %}
+      <!--  Position Close Time  -->
+            <div class="form-group row">
+                <label class="col-sm-4 form-control-label" style="text-align: right">Position Close Time</label>
+                <div class="col-sm-8">
+                    <div class="form-group">
+                        <div class='input-group date' ui-jp="datetimepicker" ui-options="{
+                            format: 'LT',
+                            icons: {
+                                time: 'fa fa-clock-o',
+                                date: 'fa fa-calendar',
+                                up: 'fa fa-chevron-up',
+                                down: 'fa fa-chevron-down',
+                                previous: 'fa fa-chevron-left',
+                                next: 'fa fa-chevron-right',
+                                today: 'fa fa-screenshot',
+                                clear: 'fa fa-trash',
+                                close: 'fa fa-remove'
+                            }
+                        }">
+                        <input type='text' class="form-control" name="position_close" id="position_close"/>
+                        <span class="input-group-addon">
+                            <span class="fa fa-calendar"></span>
+                        </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+      <!--  Cash Amount  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label text-right">Cash Amount(%)</label>
+              <div class="col-sm-8">
+                <input type="text" id="cash_amount" name="cash_amount" class="form-control"  required/>
+              </div>
+            </div>
+      <!--  Margin Amount  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label text-right">Margin Amount(%)</label>
+              <div class="col-sm-8">
+                <input type="text" id="margin_amount" name="margin_amount" class="form-control"  required/>
+              </div>
+            </div>
+
+      {% comment %}<!--  Position Close Time  -->
+            <div class="form-group row">
+                <label class="col-sm-4 form-control-label" style="text-align: right">Position Close</label>
+                <div class="col-sm-8">
+                    <div class="form-group">
+                        <div class='input-group date' ui-jp="datetimepicker" ui-options="{
+                            format: 'LT',
+                            icons: {
+                                time: 'fa fa-clock-o',
+                                date: 'fa fa-calendar',
+                                up: 'fa fa-chevron-up',
+                                down: 'fa fa-chevron-down',
+                                previous: 'fa fa-chevron-left',
+                                next: 'fa fa-chevron-right',
+                                today: 'fa fa-screenshot',
+                                clear: 'fa fa-trash',
+                                close: 'fa fa-remove'
+                            }
+                        }">
+                        <input type='text' class="form-control" name="position_close" id="position_close"/>
+                        <span class="input-group-addon">
+                            <span class="fa fa-calendar"></span>
+                        </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+      <!--  Short Min  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label m-m" style="text-align: right">Short Min</label>
+              <div class="range-slider col-sm-8">
+                <input class="range-slider__range" id="short_min1" name="short_min1" type="range" value="0" min="0" max="95"/>
+                <span id="short_min2" name="short_min2" class="range-slider__value">0</span>
+              </div>
+            </div>
+      <!--  Short Max  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label m-m" style="text-align: right">Short Max</label>
+              <div class="range-slider col-sm-8">
+                <input class="range-slider__range" id="short_max1" name="short_max1" type="range" value="0" min="0" max="95"/>
+                <span id="short_max2" name="short_max2" class="range-slider__value">0</span>
+              </div>
+            </div>
+      <!--  Symbols -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label" style="text-align: right">Symbols</label>
+              <div class="col-sm-8">
+                  <select id='symbol_list' name="symbol_list" multiple>
+                  </select>
+              </div>
+            </div>{% endcomment %}
+      <!--  Button  -->
+            <div class="modal-footer">
+              {% comment %}<button type="button" class="btn white p-x-md" style="background-color: #2e3e4e" data-dismiss="modal">Cancel</button>{% endcomment %}
+              <button type="submit" class="btn white p-x-md" style="background-color: #2e3e4e" >Add</button>
+
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- / .modal -->
+
+{% comment %}<input type="hidden" id="stock_list" value="{{ stock_list }}"/>
+<input type="hidden" id="cfd_list" value="{{ cfd_list }}"/>
+<input type="hidden" id="cfd_index_list" value="{{ cfd_index_list }}"/>
+<input type="hidden" id="forex_list" value="{{ forex_list }}"/>{% endcomment %}
+<!-- ############ PAGE END-->
+
+    </div>
+  </div>
+
+  </div>
+
+<!-- build:js scripts/app.html.js -->
+<!-- jQuery -->
+  <script src="{% static 'user/libs/jquery/jquery/dist/jquery.js' %}"></script>
+<!-- Bootstrap -->
+  <script src="{% static 'user/libs/jquery/tether/dist/js/tether.min.js' %}"></script>
+  <script src="{% static 'user/libs/jquery/bootstrap/dist/js/bootstrap.js' %}"></script>
+<!-- core -->
+  <script src="{% static 'user/libs/jquery/underscore/underscore-min.js' %}"></script>
+  <script src="{% static 'user/libs/jquery/jQuery-Storage-API/jquery.storageapi.min.js' %}"></script>
+  <script src="{% static 'user/libs/jquery/PACE/pace.min.js' %}"></script>
+
+  <script src="{% static 'user/scripts/config.lazyload.js' %}"></script>
+
+  <script src="{% static 'user/scripts/palette.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-load.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-jp.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-include.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-device.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-form.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-nav.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-screenfull.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-scroll-to.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-toggle-class.js' %}"></script>
+
+  <script src="{% static 'user/scripts/app.js' %}"></script>
+
+  <!-- ajax -->
+  <script src="{% static 'user/libs/jquery/jquery-pjax/jquery.pjax.js' %}"></script>
+  <script src="{% static 'user/scripts/ajax.js' %}"></script>
+<!-- endbuild -->
+
+  <script src="https://code.highcharts.com/stock/highstock.js"></script>
+  <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+  <script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
+<script>
+    $(document).ready(function(){
+        $('#start_date').val("2020-12-31");
+        $("#chart_display").on('click', function(){
+            var start_date = $("#start_date").val();
+            var period = $("#period").val();
+            var min_raise = $("#min_raise").val();
+            var min_fall = $("#min_fall").val();
+            var csrf_token = $('input[name=csrfmiddlewaretoken]').val();
+
+            {% comment %}console.log(start_date);
+            console.log(period);
+            console.log(min_raise);
+            console.log(min_fall);{% endcomment %}
+            $.ajax({
+                method: "POST",
+                url: "/chart_display/",
+                data:{start_date: start_date, period: period, min_raise: min_raise, min_fall: min_fall, csrfmiddlewaretoken: csrf_token},
+                success: function(result){
+                    //console.log("success ajax");
+                    var normal_data = result['normal_data'];
+                    var table_data = result['table_data'];
+                    //var bear_data = result['bear_data'];
+                    var date_data = result['date_data'];
+
+                    var body_str = "";
+                    {% comment %}var header_str = "<th>Type</th><th>From</th><th>To</th>";
+
+                    for (var i=0; i<table_data[0].length; i++){
+                        header_str += "<th>Price</th>";
+                    }{% endcomment %}
+                    var last_index = table_data[0]['data'].length -1;
+                    for(var i=0; i<table_data.length; i++){
+
+                        if(table_data[i]['color'] == "#FF0000"){
+                            if (i % 2 == 0){
+                                body_str += "<tr class='text-danger footable-even' style='display: table-row;'><td class='footable-visible footable-first-column'>Bull Period</td><td class='footable-visible'>" + table_data[i]['data'][0]['name'] + "</td><td class='footable-visible'>" + table_data[i]['data'][last_index]['name'] + "</td><td class='footable-visible'>" + table_data[i]['data'][0]['y'] + "</td><td class='footable-visible footable-last-column'>" + table_data[i]['data'][last_index]['y'] + "</td></tr>";
+                            }
+                            else{
+                                body_str += "<tr class='text-danger footable-odd' style='display: table-row;'><td class='footable-visible footable-first-column'>Bull Period</td><td class='footable-visible'>" + table_data[i]['data'][0]['name'] + "</td><td class='footable-visible'>" + table_data[i]['data'][last_index]['name'] + "</td><td class='footable-visible'>" + table_data[i]['data'][0]['y'] + "</td><td class='footable-visible footable-last-column'>" + table_data[i]['data'][last_index]['y'] + "</td></tr>";
+                            }
+                            {% comment %}for(var j=0; j<table_data[i].length; j++){
+                                body_str += "<td>"+ table_data[i][j]['y'] + "</td>"
+                            }
+                            body_str += "</tr>"{% endcomment %}
+                        }
+                        else if(table_data[i]['color'] == "#0000FF"){
+                            //var last_index = table_data[i].length -1;
+                            if(i % 2 == 0){
+                                body_str += "<tr class='text-info footable-even' style='display: table-row;'><td class='footable-visible footable-first-column'>Bear Period</td><td class='footable-visible'>" + table_data[i]['data'][0]['name'] + "</td><td class='footable-visible'>" + table_data[i]['data'][last_index]['name'] + "</td><td class='footable-visible'>" + table_data[i]['data'][0]['y'] + "</td><td class='footable-visible footable-last-column'>" + table_data[i]['data'][last_index]['y'] + "</td></tr>";
+                            }
+                            else {
+                                body_str += "<tr class='text-info footable-odd' style='display: table-row;'><td class='footable-visible footable-first-column'>Bear Period</td><td class='footable-visible'>" + table_data[i]['data'][0]['name'] + "</td><td class='footable-visible'>" + table_data[i]['data'][last_index]['name'] + "</td><td class='footable-visible'>" + table_data[i]['data'][0]['y'] + "</td><td class='footable-visible footable-last-column'>" + table_data[i]['data'][last_index]['y'] + "</td></tr>";
+                            }
+                                {% comment %}for(var j=0; j<table_data[i].length; j++){
+                                body_str += "<td>"+ table_data[i][j]['y'] + "</td>"
+                            }
+                            body_str += "</tr>"{% endcomment %}
+                        }
+                    }
+                    var table_str = "<table class='table m-b-none' ui-jp='footable' data-filter='#filter' data-page-size='10' >\n" +
+                        "        <thead>\n" +
+                        "          <tr id='table_header'>\n" +
+                        "            <th class='footable-visible footable-first-column footable-sortable'>Type</th>\n" +
+                        "              <th class='footable-visible footable-sortable'>From</th>\n" +
+                        "              <th class='footable-visible footable-sortable'>To</th>\n" +
+                        "              <th class='footable-visible footable-sortable'>Start Price</th>\n" +
+                        "              <th class='footable-visible footable-last-column footable-sortable'>End Price</th>\n" +
+                        "          </tr>\n" +
+                        "        </thead>\n" +
+                        "        <tbody id='table_body'>" +
+                        body_str +
+                        "</tbody>\n" +
+                        "        <tfoot class='hide-if-no-paging'>\n" +
+                        "          <tr>\n" +
+                        "              <td colspan='5' class='text-center footable-visible'>\n" +
+                        "                  <ul class='pagination'></ul>\n" +
+                        "              </td>\n" +
+                        "          </tr>\n" +
+                        "        </tfoot>\n" +
+                        "      </table>"
+                    //console.log(bull_data);
+                    //console.log(bear_data);
+                    {% comment %}
+                    var normal_data_list = [];
+                    var bull_data_list = [];
+                    var bear_data_list = [];
+                    for (var i=0; i< normal_data.length; i++){
+                        normal_data_list.push({x: normal_data[i]['x'], y: normal_data[i]['y'], name: normal_data[i]['name']})
+                    }
+                    for(var i=0; i< bull_data.length; i++){
+                        bull_data_list.push({x: bull_data[i]['x'], y: bull_data[i]['y'], name: bull_data[i]['name']})
+                    }
+                    for(var i=0; i< bear_data.length; i++){
+                        bear_data_list.push({x: bear_data[i]['x'], y: bear_data[i]['y'], name: bear_data[i]['name']})
+                    }
+                    //var data_list2 = [{name: 'Value', data: data_list1}];
+                    //console.log(data_list2);
+                    var data_list = [
+                        {data: normal_data_list, color: '#00FF00'},
+                        {data: bull_data_list, color: '#FF0000'},
+                        {data: bear_data_list, color: '#0000FF'}
+                    ];
+                    console.log(data_list);
+                    console.log(normal_data_list);
+                    console.log(bull_data_list);
+                    console.log(bear_data_list);{% endcomment %}
+                    $("#chart").show();
+                    createChart(normal_data, date_data);
+
+                    //$("#table_header").html(header_str);
+                    $("#table_body").html(body_str);
+                    //$("#table_data").html(table_str);
+                    $("#result_table").show();
+                }
+            });
+        });
+
+    });
+  </script>
+<script>
+function createChart(data_list, date_data) {
+
+  Highcharts.stockChart('chart', {
+
+    rangeSelector: {
+      enabled: false,
+
+    },
+    exporting: {
+      enabled: false
+    },
+    yAxis: {
+      labels: {
+        formatter: function () {
+          //return (this.value > 0 ? ' + ' : '') + this.value + '%';
+            return this.value
+        },
+        style: {
+            color: '#000000',
+            fontSize: "15px"
+        },
+      },
+      plotLines: [{
+        value: 0,
+        width: 2,
+        color: 'silver'
+      }]
+    },
+    xAxis: {
+      labels: {
+          //enabled: false
+        formatter: function(){
+            return date_data[this.value];
+        },
+        style: {
+            color: '#000000',
+            fontSize: "15px"
+        },
+        maxStaggerLines: 3
+      }
+    },
+    plotOptions: {
+      series: {
+        //compare: 'percent',
+        showInNavigator: true
+      }
+    },
+
+    tooltip: {
+      //pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change})<br/>',
+      valueDecimals: 2,
+      //split: true
+    },
+    navigator: {
+      xAxis: {
+        labels: {
+          formatter: function(){
+            return date_data[this.value];
+          },
+          style: {
+            color: '#000000',
+            fontSize: "15px"
+        },
+        }
+      }
+    },
+    series: data_list
+    //series: seriesOptions
+  });
+
+}
+
+</script>
+</body>
+</html>

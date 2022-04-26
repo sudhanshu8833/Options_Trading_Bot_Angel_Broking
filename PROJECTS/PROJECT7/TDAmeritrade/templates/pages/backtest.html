@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>TD Amderitrade TradingBot</title>
+  <meta name="description" content="Admin, Dashboard, Bootstrap, Bootstrap 4, Angular, AngularJS" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimal-ui" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  {% load static %}
+  <!-- for ios 7 style, multi-resolution icon of 152x152 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-barstyle" content="black-translucent">
+  <link rel="apple-touch-icon" href="{% static 'user/assets/images/logo.png' %}">
+  <meta name="apple-mobile-web-app-title" content="Flatkit">
+  <!-- for Chrome on Android, multi-resolution icon of 196x196 -->
+  <meta name="mobile-web-app-capable" content="yes">
+  {% comment %}<link rel="shortcut icon" sizes="196x196" href="{% static 'user/assets/images/logo.png' %}">{% endcomment %}
+  {% comment %}<link rel="icon" type="image/png" href="{% static 'landingpage/icon/favicon-32x32.png' %}" sizes="32x32">
+  <link rel="apple-touch-icon" href="{% static 'landingpage/icon/favicon-32x32.png' %}">{% endcomment %}
+  <!-- style -->
+  <link rel="stylesheet" href="{% static 'user/assets/animate.css/animate.min.css' %}" type="text/css" />
+  <link rel="stylesheet" href="{% static 'user/assets/glyphicons/glyphicons.css' %}" type="text/css" />
+  <link rel="stylesheet" href="{% static 'user/assets/font-awesome/css/font-awesome.min.css' %}" type="text/css" />
+  <link rel="stylesheet" href="{% static 'user/assets/material-design-icons/material-design-icons.css' %}" type="text/css" />
+
+  <link rel="stylesheet" href="{% static 'user/assets/bootstrap/dist/css/bootstrap.min.css' %}" type="text/css" />
+  <!-- build:css ../assets/styles/app.min.css -->
+  <link rel="stylesheet" href="{% static 'user/assets/styles/app.css' %}" type="text/css" />
+  <!-- endbuild -->
+  <link rel="stylesheet" href="{% static 'user/assets/styles/font.css' %}" type="text/css" />
+  {% comment %}<link rel="stylesheet" type="text/css" href="{% static 'user/libs/jquery/footable/css/footable.core.css' %}"  />{% endcomment %}
+</head>
+<body class="dark">
+  <div class="app" id="app">
+
+<!-- ############ LAYOUT START-->
+
+  <!-- aside -->
+  {% include 'pages/aside.html' %}
+  <!-- / -->
+
+
+  <!-- content -->
+  <div id="content" class="app-content box-shadow-z0" role="main">
+    <div class="app-header white box-shadow">
+        <div class="navbar navbar-toggleable-sm flex-row align-items-center">
+            <!-- Open side - Naviation on mobile -->
+            <a data-toggle="modal" data-target="#aside" class="hidden-lg-up mr-3">
+              <i class="material-icons">&#xe5d2;</i>
+            </a>
+            <!-- / -->
+
+            <!-- Page title - Bind to $state's title -->
+            <div class="mb-0 h5 no-wrap" ng-bind="$state.current.data.title" id="pageTitle"></div>
+
+            <!-- navbar collapse -->
+            <div class="collapse navbar-collapse" id="collapse">
+
+              <ul class="nav navbar-nav mr-auto">
+                <li class="nav-item dropdown">
+                    <h3 style="margin-bottom: 0px">Backtesting</h3>
+                </li>
+              </ul>
+              <div ui-include="{% static 'user/views/blocks/navbar.form.html' %}"></div>
+              <!-- / -->
+            </div>
+
+        </div>
+    </div>
+    <div class="app-footer">
+      <div class="p-2 text-xs">
+        <div class="pull-right text-muted py-1">
+          &copy; <strong>TD Ameritrade Trading Bot</strong> {% comment %}<span class="hidden-xs-down">- Analytical Option Navigator <img width="20px" height="22px" src="../../../../static/landingpage/icon/heart.png"></span>{% endcomment %}
+        </div>
+        {% comment %}<div class="nav">
+          <a class="nav-link" href="{% static 'user/' %}">About</a>
+          <a class="nav-link" href="http://themeforest.net/user/flatfull/portfolio?ref=flatfull">Get it</a>
+        </div>{% endcomment %}
+      </div>
+    </div>
+    <div ui-view class="app-body" id="view">
+
+<!-- ############ PAGE START-->
+<div class="p-a white lt box-shadow">
+    <form id="run_backtest" method="post">{% csrf_token %}
+        <div class="row" style="">
+            <div class="col-sm-2">
+                <div class="form-group row">
+                    <label class="col-sm-4 form-control-label text-right" >Bot</label>
+                    <div class="col-sm-8 input-group select2-bootstrap-prepend">
+                        <select required name="backtest_bot" id="backtest_bot" style="background-color: rgb(72,87,103);" class="form-control">
+                            {% if bot_list %}
+                                {% for bot in bot_list %}
+                                    <option value="{{ bot.id }}">{{ bot.name }}</option>
+                                {% endfor %}
+                            {% endif %}
+
+                        </select>
+                    </div>
+                </div>
+		    </div>
+		    <div class="col-sm-4">
+			    <div class="form-group row">
+                    <label class="col-sm-4 form-control-label text-right" >From</label>
+                    <div class="col-sm-8 input-group select2-bootstrap-prepend">
+                        <div class="form-group">
+                    <div class='input-group date' ui-jp="datetimepicker" ui-options="{
+                        format: 'YYYY-MM-DD',
+                        icons: {
+                        time: 'fa fa-clock-o',
+                        date: 'fa fa-calendar',
+                        up: 'fa fa-chevron-up',
+                        down: 'fa fa-chevron-down',
+                        previous: 'fa fa-chevron-left',
+                        next: 'fa fa-chevron-right',
+                        today: 'fa fa-screenshot',
+                        clear: 'fa fa-trash',
+                        close: 'fa fa-remove'
+                        }
+                    }">
+                        <input required type='text' class="form-control" id="backtest_time_from" name="backtest_time_from"/>
+                        <span class="input-group-addon">
+                            <span class="fa fa-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+                    </div>
+                </div>
+		    </div>
+            <div class="col-sm-4">
+			    <div class="form-group row">
+                    <label class="col-sm-4 form-control-label text-right" >To</label>
+                    <div class="col-sm-8 input-group select2-bootstrap-prepend">
+                        <div class="form-group">
+                    <div class='input-group date' ui-jp="datetimepicker" ui-options="{
+                        format: 'YYYY-MM-DD',
+                        icons: {
+                        time: 'fa fa-clock-o',
+                        date: 'fa fa-calendar',
+                        up: 'fa fa-chevron-up',
+                        down: 'fa fa-chevron-down',
+                        previous: 'fa fa-chevron-left',
+                        next: 'fa fa-chevron-right',
+                        today: 'fa fa-screenshot',
+                        clear: 'fa fa-trash',
+                        close: 'fa fa-remove'
+                        }
+                    }">
+                        <input required type='text' class="form-control" id="backtest_time_to" name="backtest_time_to"/>
+                        <span class="input-group-addon">
+                            <span class="fa fa-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+                    </div>
+                </div>
+		    </div>
+            <div class="col-sm-2">
+                <button type="submit" class="btn btn-fw info" >Backtest</button>
+		    </div>
+	    </div>
+    </form>
+
+</div>
+
+<div class="padding">
+    {% include 'pages/message.html' %}
+    <div class="text-center" id='loader' style='display: none;'>
+        {% comment %}<img src='../../../../static/landingpage/img/loader.gif' width='200px' height='200px'>{% endcomment %}
+        <img src="{% static 'landingpage/img/loader.gif' %}" width='200px' height='200px'>
+    </div>
+    <div id="chart_body" style="display: none">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="box">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="b-b b-primary nav-active-primary">
+                                    <ul class="nav nav-tabs" id="tab_list">
+                                        {% comment %}<li class="nav-item">
+                                            <a class="nav-link active" href data-toggle="tab" data-target="#tab_open_orders">Open Orders</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link " href data-toggle="tab" data-target="#tab_order_history">Order History</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link " href data-toggle="tab" data-target="#tab_schedule_order">Schedule Orders</a>
+                                        </li>{% endcomment %}
+                                    </ul>
+                                </div>
+                                <div class="tab-content p-a m-b-md" id="tab_content">
+                                    {% comment %}<div class="tab-pane animated fadeIn text-muted active" id="tab_open_orders">
+                                        <div class="box">
+                                            <div class="box-body">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane animated fadeIn text-muted" id="tab_order_history">
+                                        <form method="post" id="binance_order_history_view">
+                                        <div class="box">
+                                            <div class="box-body">
+                                            </div>
+                                        </div>
+                                        </form>
+                                    </div>
+                                    <div class="tab-pane animated fadeIn text-muted" id="tab_schedule_order">
+                                        <div class="box">
+                                            <div class="box-body">
+                                            </div>
+                                        </div>
+                                    </div>{% endcomment %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="result_table" style="display: none">
+        <div class="box">
+            <div class="box-body">
+                                        <table class="table table-bordered table-striped table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center">Signal</th>
+                                                    <th class="text-center">Date</th>
+                                                    <th class="text-center">Price</th>
+                                                    <th class="text-center">P/L</th>
+                                                    <th class="text-center">Win</th>
+                                                    <th class="text-center">Lost</th>
+                                                    <th class="text-center">Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="backtesting_result">
+                                            {% comment %}{% if open_order %}
+                                                {% for item in open_order %}
+                                                    <tr>
+                                                        <td class="text-center">{{ item.date }}</td>
+                                                        <td class="text-center">{{ item.symbol }}</td>
+                                                        <td class="text-center">{{ item.type }}</td>
+                                                        {% if item.side == "BUY" %}
+                                                            <td class="text-center text-primary">{{ item.side }}</td>
+                                                        {% elif item.side == "SELL" %}
+                                                            <td class="text-center text-danger">{{ item.side }}</td>
+                                                        {% endif %}
+
+                                                        <td class="text-center">{{ item.price }}</td>
+                                                        <td class="text-center">{{ item.origQty }}</td>
+                                                        <td class="text-center">{{ item.status }}</td>
+                                                        <input type="hidden" value="{{ item.orderId }}"/>
+                                                    </tr>
+                                                {% endfor %}
+                                            {% endif %}{% endcomment %}
+                                            </tbody>
+                                        </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ############ PAGE END-->
+
+    </div>
+  </div>
+
+  </div>
+
+<!-- build:js scripts/app.html.js -->
+<!-- jQuery -->
+  <script src="{% static 'user/libs/jquery/jquery/dist/jquery.js' %}"></script>
+<!-- Bootstrap -->
+  <script src="{% static 'user/libs/jquery/tether/dist/js/tether.min.js' %}"></script>
+  <script src="{% static 'user/libs/jquery/bootstrap/dist/js/bootstrap.js' %}"></script>
+<!-- core -->
+  <script src="{% static 'user/libs/jquery/underscore/underscore-min.js' %}"></script>
+  <script src="{% static 'user/libs/jquery/jQuery-Storage-API/jquery.storageapi.min.js' %}"></script>
+  <script src="{% static 'user/libs/jquery/PACE/pace.min.js' %}"></script>
+
+  <script src="{% static 'user/scripts/config.lazyload.js' %}"></script>
+
+  <script src="{% static 'user/scripts/palette.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-load.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-jp.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-include.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-device.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-form.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-nav.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-screenfull.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-scroll-to.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-toggle-class.js' %}"></script>
+
+  <script src="{% static 'user/scripts/app.js' %}"></script>
+
+  <!-- ajax -->
+  <script src="{% static 'user/libs/jquery/jquery-pjax/jquery.pjax.js' %}"></script>
+  <script src="{% static 'user/scripts/ajax.js' %}"></script>
+<!-- endbuild -->
+
+  <script src="https://code.highcharts.com/stock/highstock.js"></script>
+  <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+  <script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
+<script>
+    $(document).ready(function(){
+        $("#run_backtest").on("submit", function (e) {
+            e.preventDefault();
+            var time_from = $("#backtest_time_from").val();
+            var time_to = $("#backtest_time_to").val();
+            var bot_id = $("#backtest_bot").val();
+            var csrf_token = $('input[name=csrfmiddlewaretoken]').val();
+            $("#tab_list").html("");
+            $("#tab_content").html("");
+            $("#backtesting_result").html("");
+            $("#chart_body").hide();
+            $("#result_table").hide();
+            $.ajax({
+                method: "POST",
+                url: "/run_backtest/",
+                data: {bot_id: bot_id, time_from: time_from, time_to: time_to, csrfmiddlewaretoken: csrf_token},
+                beforeSend: function() { $("#loader").show();},
+                success: function(result){
+                    if(result.result === "success"){
+                        var symbol = result.symbol;
+                        var main_time_frame = result.main_time_frame;
+                        var time_frame = result.time_frame;
+                        var chart_data = result.chart_data;
+                        var buy_data = result.buy_result;
+                        var sell_data = result.sell_result;
+                        var backtesting_result = result.backtesting_result;
+                        var win_count = result.win_count;
+                        var lose_count = result.lose_count;
+                        var win_value = result.win_value;
+                        var lose_value = result.lose_value;
+                        var total_value = result.total_value;
+                        //console.log(chart_data)
+                        time_frame.forEach(function(value) {
+                            if (value === main_time_frame) {
+                                $("#tab_list").append('<li class="nav-item"><a class="nav-link active" href data-toggle="tab" data-target="#tab_chart_' + value + '">' + value + ' Chart</a></li>');
+                                $("#tab_content").append('<div class="tab-pane animated fadeIn text-muted active" id="tab_chart_' + value + '"><div class="box"><div class="box-body" id="' + value + '_chart_body"></div></div></div>');
+                                Signal_Chart(value+"_chart_body", symbol + " " + value + " Chart", chart_data[value], buy_data, sell_data);
+                            }
+                            else {
+                                $("#tab_list").append('<li class="nav-item"><a class="nav-link" href data-toggle="tab" data-target="#tab_chart_' + value + '">' + value + ' Chart</a></li>');
+                                $("#tab_content").append('<div class="tab-pane animated fadeIn text-muted" id="tab_chart_' + value + '"><div class="box"><div class="box-body" id="' + value + '_chart_body"></div></div></div>');
+                                Chart(value+"_chart_body", symbol + " " + value + " Chart", chart_data[value]);
+                                //Signal_Chart(value+"_chart_body", symbol + " " + value + " Chart", chart_data[value], buy_data, sell_data);
+                            }
+                        });
+                        $("#loader").hide();
+                        $("#chart_body").show();
+                        backtesting_result.forEach(function (value, index) {
+                            if(index === 0){
+                                if (value["signal"] === "Buy") {
+                                    $("#backtesting_result").append('<tr><td class="text-center text-primary">' + value["signal"] + '</td><td class="text-center">' + value["date"] + '</td><td class="text-center">' + value["close"] + '</td><td class="text-center">' + value["p_l"] + '</td><td class="text-center">' + win_count + '</td><td class="text-center">' + lose_count + '</td><td class="text-center">' + (win_count + lose_count) + '</td></tr>')
+                                }
+                                else if (value["signal"] === "Sell") {
+                                    $("#backtesting_result").append('<tr><td class="text-center text-danger">' + value["signal"] + '</td><td class="text-center">' + value["date"] + '</td><td class="text-center">' + value["close"] + '</td><td class="text-center">' + value["p_l"] + '</td><td class="text-center">' + win_count + '</td><td class="text-center">' + lose_count + '</td><td class="text-center">' + (win_count + lose_count) + '</td></tr>')
+                                }
+                            }
+                            else if (index === 1) {
+                                if (value["signal"] === "Buy") {
+                                    $("#backtesting_result").append('<tr><td class="text-center text-primary">' + value["signal"] + '</td><td class="text-center">' + value["date"] + '</td><td class="text-center">' + value["close"] + '</td><td class="text-center">' + value["p_l"] + '</td><td class="text-center">' + win_value + '</td><td class="text-center">' + lose_value + '</td><td class="text-center">' + total_value + '</td></tr>')
+                                }
+                                else if (value["signal"] === "Sell") {
+                                    $("#backtesting_result").append('<tr><td class="text-center text-danger">' + value["signal"] + '</td><td class="text-center">' + value["date"] + '</td><td class="text-center">' + value["close"] + '</td><td class="text-center">' + value["p_l"] + '</td><td class="text-center">' + win_value + '</td><td class="text-center">' + lose_value + '</td><td class="text-center">' + total_value + '</td></tr>')
+                                }
+                            }
+                            else {
+                                if (value["signal"] === "Buy") {
+                                    $("#backtesting_result").append('<tr><td class="text-center text-primary">' + value["signal"] + '</td><td class="text-center">' + value["date"] + '</td><td class="text-center">' + value["close"] + '</td><td class="text-center">' + value["p_l"] + '</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td></tr>')
+                                }
+                                else if (value["signal"] === "Sell") {
+                                    $("#backtesting_result").append('<tr><td class="text-center text-danger">' + value["signal"] + '</td><td class="text-center">' + value["date"] + '</td><td class="text-center">' + value["close"] + '</td><td class="text-center">' + value["p_l"] + '</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td></tr>')
+                                }
+                            }
+                        });
+                        $("#result_table").show();
+                    }
+                    else {
+                        location.reload();
+                    }
+                    //location.reload();
+                }
+            });
+        });
+    });
+</script>
+
+<script type="text/javascript">
+function Chart(id, title, chart_data){//}), rsi_data, rsi_top, rsi_bottom){
+groupingUnits = [
+        ['minute', [1, 5, 15, 30]],
+        ['hour', [1, 4]],
+        ['day', [1]],
+        ['week', [1]],
+        ['month', [1, 3, 6]]
+    ];
+Highcharts.stockChart(id, {
+
+    chart: {
+        backgroundColor: "#354759"
+    },
+
+    rangeSelector: {
+        //selected: 1
+        enabled: false
+    },
+
+    exporting: {
+        enabled: false
+    },
+
+    time: {
+        timezoneOffset: 4 * 60
+    },
+
+    title: {
+      text: title,
+        style: {
+          "color": "#0cc2aa"
+        }
+    },
+
+    yAxis: [
+      {
+        labels: {
+          align: 'right',
+          x: -3
+        },
+        title: {
+          text: 'OHLC'
+        },
+        height: '100%',
+        lineWidth: 1,
+        resize: {
+          enabled: true
+        }
+      },
+      {% comment %}{
+        labels: {
+          align: 'right',
+          x: -3
+        },
+        title: {
+          text: 'RSI'
+        },
+        plotLines: [
+      {
+        value: rsi_bottom,
+        color: 'green',
+        dashStyle: 'shortdash',
+        width: 2,
+        label: {
+          text: rsi_bottom
+        }
+      },
+      {
+        value: rsi_top,
+        color: 'red',
+        dashStyle: 'shortdash',
+        width: 2,
+        label: {
+          text: rsi_top
+        }
+      }],
+        top: '65%',
+        height: '35%',
+        offset: 0,
+        lineWidth: 2
+      }{% endcomment %}
+    ],
+
+    tooltip: {
+      split: true
+    },
+
+    {% comment %}navigation: {
+        buttonOptions: {
+            enabled: false,
+        }
+    },{% endcomment %}
+    plotOptions : {
+        series: {
+            turboThreshold: 1000000000000
+        }
+    },
+
+    series: [
+      {
+        type: 'candlestick',
+        name: title,
+        data: chart_data,
+        dataGrouping: {
+          units: groupingUnits
+        }
+      },
+      {% comment %}{
+        type: 'line',
+        name: 'RSI Top',
+        data: rsi_data,
+        color: '#e6ee9c',
+        yAxis: 1,
+        dataGrouping: {
+          units: groupingUnits
+        }
+      }{% endcomment %}
+    ]
+  });
+}
+
+function Signal_Chart(id, title, chart_data, buy_data, sell_data){
+groupingUnits = [
+        ['minute', [1, 5, 15, 30]],
+        ['hour', [1, 4]],
+        ['day', [1]],
+        ['week', [1]],
+        ['month', [1, 3, 6]]
+    ];
+Highcharts.stockChart(id, {
+
+    chart: {
+        backgroundColor: "#354759"
+    },
+
+    rangeSelector: {
+        //selected: 1
+        enabled: false
+    },
+
+    exporting: {
+        enabled: false
+    },
+
+    time: {
+        timezoneOffset: 4 * 60
+    },
+
+    title: {
+      text: title,
+        style: {
+          "color": "#0cc2aa"
+        }
+    },
+
+    yAxis: [
+      {
+        labels: {
+          align: 'right',
+          x: -3
+        },
+        title: {
+          text: 'OHLC'
+        },
+        height: '100%',
+        lineWidth: 1,
+        resize: {
+          enabled: true
+        }
+      },
+      {% comment %}{
+        labels: {
+          align: 'right',
+          x: -3
+        },
+        title: {
+          text: 'RSI'
+        },
+        plotLines: [
+      {
+        value: rsi_bottom,
+        color: 'green',
+        dashStyle: 'shortdash',
+        width: 2,
+        label: {
+          text: rsi_bottom
+        }
+      },
+      {
+        value: rsi_top,
+        color: 'red',
+        dashStyle: 'shortdash',
+        width: 2,
+        label: {
+          text: rsi_top
+        }
+      }],
+        top: '65%',
+        height: '35%',
+        offset: 0,
+        lineWidth: 2
+      }{% endcomment %}
+    ],
+
+    tooltip: {
+      split: true
+    },
+
+    {% comment %}navigation: {
+        buttonOptions: {
+            enabled: false,
+        }
+    },{% endcomment %}
+    plotOptions : {
+        series: {
+            turboThreshold: 1000000000000
+        }
+    },
+
+    series: [
+        {
+            type: 'candlestick',
+            name: title,
+            id: "history_data",
+            data: chart_data,
+            dataGrouping: {
+              units: groupingUnits
+            }
+        },
+        {
+            type: 'flags',
+            name: 'Buy Signals',
+            data: buy_data,
+            onSeries: 'history_data',
+            shape: 'squarepin'
+        },
+        {
+            type: 'flags',
+            name: 'Sell Signals',
+            data: sell_data,
+            onSeries: 'history_data',
+            shape: 'squarepin'
+        }
+      {% comment %}{
+        type: 'line',
+        name: 'RSI Top',
+        data: rsi_data,
+        color: '#e6ee9c',
+        yAxis: 1,
+        dataGrouping: {
+          units: groupingUnits
+        }
+      }{% endcomment %}
+    ]
+  });
+}
+</script>
+</body>
+</html>

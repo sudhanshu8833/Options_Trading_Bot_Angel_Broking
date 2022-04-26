@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>TD Amderitrade TradingBot</title>
+  <meta name="description" content="Admin, Dashboard, Bootstrap, Bootstrap 4, Angular, AngularJS" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimal-ui" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  {% load static %}
+  <!-- for ios 7 style, multi-resolution icon of 152x152 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-barstyle" content="black-translucent">
+  <link rel="apple-touch-icon" href="{% static 'user/assets/images/logo.png' %}">
+  <meta name="apple-mobile-web-app-title" content="Flatkit">
+  <!-- for Chrome on Android, multi-resolution icon of 196x196 -->
+  <meta name="mobile-web-app-capable" content="yes">
+  {% comment %}<link rel="shortcut icon" sizes="196x196" href="{% static 'user/assets/images/logo.png' %}">{% endcomment %}
+  {% comment %}<link rel="icon" type="image/png" href="{% static 'landingpage/icon/favicon-32x32.png' %}" sizes="32x32">
+  <link rel="apple-touch-icon" href="{% static 'landingpage/icon/favicon-32x32.png' %}">{% endcomment %}
+  <!-- style -->
+  <link rel="stylesheet" href="{% static 'user/assets/animate.css/animate.min.css' %}" type="text/css" />
+  <link rel="stylesheet" href="{% static 'user/assets/glyphicons/glyphicons.css' %}" type="text/css" />
+  <link rel="stylesheet" href="{% static 'user/assets/font-awesome/css/font-awesome.min.css' %}" type="text/css" />
+  <link rel="stylesheet" href="{% static 'user/assets/material-design-icons/material-design-icons.css' %}" type="text/css" />
+
+  <link rel="stylesheet" href="{% static 'user/assets/bootstrap/dist/css/bootstrap.min.css' %}" type="text/css" />
+  <!-- build:css ../assets/styles/app.min.css -->
+  <link rel="stylesheet" href="{% static 'user/assets/styles/app.css' %}" type="text/css" />
+  <!-- endbuild -->
+  <link rel="stylesheet" href="{% static 'user/assets/styles/font.css' %}" type="text/css" />
+  {% comment %}<link rel="stylesheet" type="text/css" href="{% static 'user/libs/jquery/footable/css/footable.core.css' %}"  />{% endcomment %}
+</head>
+<body class="dark">
+  <div class="app" id="app">
+
+<!-- ############ LAYOUT START-->
+
+  <!-- aside -->
+  {% include 'pages/aside.html' %}
+  <!-- / -->
+
+  <!-- content -->
+  <div id="content" class="app-content box-shadow-z0" role="main">
+    <div class="app-header white box-shadow">
+        <div class="navbar navbar-toggleable-sm flex-row align-items-center">
+
+            <a data-toggle="modal" data-target="#aside" class="hidden-lg-up mr-3">
+              <i class="material-icons">&#xe5d2;</i>
+            </a>
+            <div class="mb-0 h5 no-wrap" ng-bind="$state.current.data.title" id="pageTitle"></div>
+
+            <!-- navbar collapse -->
+            <div class="collapse navbar-collapse" id="collapse">
+
+              <ul class="nav navbar-nav mr-auto">
+                <li class="nav-item dropdown">
+                    <h3 style="margin-bottom: 0px">Trading</h3>
+                </li>
+              </ul>
+              <div ui-include="{% static 'user/views/blocks/navbar.form.html' %}"></div>
+              <!-- / -->
+            </div>
+
+        </div>
+    </div>
+    <div class="app-footer">
+      <div class="p-2 text-xs">
+        <div class="pull-right text-muted py-1">
+          &copy; <strong>TD Ameritrade TradingBot</strong>
+        </div>
+      </div>
+    </div>
+    <div ui-view class="app-body" id="view">
+
+<!-- ############ PAGE START-->
+    <div class="padding">
+      {% include 'pages/message.html' %}
+      <div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h2>Bot List</h2>
+                    </div>
+                    <div class="m-0" style="border-bottom: 3px solid rgba(120, 130, 140, 0.13)"></div>
+                    <div class="box-body">
+                        <form action="" method="post">{% csrf_token %}
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="b-b b-primary nav-active-primary">
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" href data-toggle="tab" data-target="#tab1">All Bot</a>
+                                        </li>
+                                        {% comment %}<li class="nav-item">
+                                            <a class="nav-link" href data-toggle="tab" data-target="#tab2">Paper Bot</a>
+                                        </li>{% endcomment %}
+                                        <li class="nav-item dropdown" style="position: absolute; right: 70px">
+                                            <a class="nav-link" href data-toggle="modal" data-target="#add_bot">
+                                                <i class="fa fa-fw fa-plus text-muted"></i>
+                                                <span>Add Bot</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-content p-a m-b-md">
+                                    <div class="tab-pane active" id="tab1">
+                                        <div class="box">
+                                            <div class="box-body">
+                                                Search: <input id="filter" type="text" class="form-control input-sm w-auto inline m-r"/>
+                                            </div>
+                                            <div>
+                                                <table class="table m-b-none" ui-jp="footable" data-filter="#filter" data-page-size="10">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Bot Type</th>
+                                                            <th>Trading Side</th>
+                                                            <th>Bot Name</th>
+                                                            <th>Symbol</th>
+                                                            <th>Amount(USD)</th>
+                                                            <th>Entry Strategy</th>
+                                                            <th>Close Strategy</th>
+                                                            <th>Status</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% if bot_list %}
+                                                        {% for bot in bot_list %}
+                                                        <tr>
+                                                            <td>{{ bot.type }}</td>
+                                                            <td>{{ bot.side }}</td>
+                                                            <td>{{ bot.name }}</td>
+                                                            <td>{{ bot.symbol }}</td>
+                                                            <td>{{ bot.amount }}</td>
+                                                            <td>{{ bot.entry }}</td>
+                                                            <td>{{ bot.close }}</td>
+                                                            <td>
+                                                                {% if bot.status == True %}
+                                                                    {% comment %}<a class="label danger" href="#" onclick="update_bot_status({{ bot.id }}, '0')">Disable</a>{% endcomment %}
+                                                                    <a class="label danger" href="/update_bot_status/{{ bot.id }}/0">Disable</a>
+                                                                {% elif bot.status == False %}
+                                                                    {% comment %}<a class="label primary" href="#" onclick="update_bot_status({{ bot.id }}, '1')">Enable</a>{% endcomment %}
+                                                                    <a class="label danger" href="/update_bot_status/{{ bot.id }}/1">Disable</a>
+                                                                {% endif %}
+                                                            </td>
+                                                            <td>
+                                                                <a class="label danger" href="/delete_bot/{{ bot.id }}">Delete</a>
+                                                            </td>
+                                                        </tr>
+                                                        {% endfor %}
+                                                    {% endif %}
+
+                                                    </tbody>
+                                                    <tfoot class="hide-if-no-paging">
+                                                        <tr>
+                                                            <td colspan="5" class="text-center">
+                                                                <ul class="pagination"></ul>
+                                                            </td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    {% comment %}<div class="tab-pane" id="tab2">
+                                        <div class="box">
+                                            <div class="box-body">
+                                                Search: <input id="filter" type="text" class="form-control input-sm w-auto inline m-r"/>
+                                            </div>
+                                            <div>
+                                                <table class="table m-b-none" ui-jp="footable" data-filter="#filter" data-page-size="10">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Bot Name</th>
+                                                            <th>Base Strategy</th>
+                                                            <th>Symbol</th>
+                                                            <th>Data Time Frame</th>
+                                                            <th>Position Close Time</th>
+                                                            <th>Cash Amount(%)</th>
+                                                            <th>Margin Amount(%)</th>
+                                                            <th>Status</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% if paper_bot_list %}
+                                                        {% for bot in paper_bot_list %}
+                                                        <tr>
+                                                            <td>{{ bot.name }}</td>
+                                                            <td>{{ bot.strategy }}</td>
+                                                            <td>{{ bot.symbol }}</td>
+                                                            <td>{{ bot.time_frame }} Minute</td>
+                                                            <td>{{ bot.close_time }}</td>
+                                                            <td>{{ bot.cash_amount }}</td>
+                                                            <td>{{ bot.margin_amount }}</td>
+                                                            <td>
+                                                                {% if bot.status == True %}
+                                                                    <p class="text-primary">Running Status</p>
+                                                                {% elif bot.status == False %}
+                                                                    <p class="text-danger">Stop Status</p>
+                                                                {% endif %}
+                                                            </td>
+                                                            <td>
+                                                                {% if bot.status == True %}
+                                                                    <a class="label danger" href="#" onclick="update_bot_status({{ bot.id }}, '0')">Disable</a>
+                                                                {% elif bot.status == False %}
+                                                                    <a class="label primary" href="#" onclick="update_bot_status({{ bot.id }}, '1')">Enable</a>
+                                                                {% endif %}
+
+                                                                <a class="label danger" href="/delete_bot/{{ bot.id }}">Delete</a>
+                                                            </td>
+                                                        </tr>
+                                                        {% endfor %}
+                                                    {% endif %}
+
+                                                    </tbody>
+                                                    <tfoot class="hide-if-no-paging">
+                                                        <tr>
+                                                            <td colspan="5" class="text-center">
+                                                                <ul class="pagination"></ul>
+                                                            </td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                    </div>{% endcomment %}
+                                </div>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+      </div>
+    </div>
+<!-- .modal -->
+{% comment %}<div id="edit_bot" class="modal black-overlay" data-backdrop="true">
+    <div class="modal-dialog">
+      <div class="modal-content box-shadow-md black lt m-b">
+        <div class="modal-header">
+      	  <div class="col-sm-12 row"  >
+                <div class="col-sm-6">
+                    <h3 class="modal-title">Edit Security</h3>
+                </div>
+                <div class="col-sm-6 text-lg-right m-m">
+                    <a class="text-info " href="{% url 'trading' %}"><h6>Back</h6></a>
+                </div>
+            </div>
+        </div>
+        <div class="modal-body p-lg">
+          <form id="edit_security_form" method="post">{% csrf_token %}
+            <input type="hidden" id="edit_id" name="edit_id">
+      <!--   Security Name  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label" style="text-align: right">Security Name</label>
+              <div class="col-sm-8">
+                <input type="text" id="edit_security_name" name="edit_security_name" class="form-control"  required/>
+              </div>
+            </div>
+      <!--  Security Type  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label" style="text-align: right">Security Type</label>
+              <div class="col-sm-8">
+                <select required name="edit_security_type" id="edit_security_type" style="background-color: rgb(72,87,103);" class="form-control">
+                    <option value=""></option>
+                    <option value="STOCK">Stock</option>
+                    <option value="CFD">CFD</option>
+                    <option value="CFD_INDEX">CFD Index</option>
+                    <option value="FOREX">Forex</option>
+                </select>
+              </div>
+            </div>
+      <!--  Expire Date -->
+            <div class="form-group row">
+                <label class="col-sm-4 form-control-label" style="text-align: right">Expire Date</label>
+                <div class="col-sm-8">
+                    <div class="form-group">
+                                                        <div class='input-group date' ui-jp="datetimepicker" ui-options="{
+                                                            format: 'YYYY-M-D',
+                                                                icons: {
+                                                                    time: 'fa fa-clock-o',
+                                                                    date: 'fa fa-calendar',
+                                                                    up: 'fa fa-chevron-up',
+                                                                    down: 'fa fa-chevron-down',
+                                                                    previous: 'fa fa-chevron-left',
+                                                                    next: 'fa fa-chevron-right',
+                                                                    today: 'fa fa-screenshot',
+                                                                    clear: 'fa fa-trash',
+                                                                    close: 'fa fa-remove'
+                                                                }
+                                                        }">
+                                                            <input type='text' class="form-control" name="edit_expire_date" id="edit_expire_date" required/>
+                                                            <span class="input-group-addon">
+                                                                <span class="fa fa-calendar"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                </div>
+            </div>
+      <!--  Number of Bars  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label text-right">Number of Bars</label>
+              <div class="col-sm-8">
+                <input type="text" id="edit_bar_size" name="edit_bar_size" class="form-control"  required/>
+              </div>
+            </div>
+      <!--  Long Min  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label m-m" style="text-align: right">Long Min</label>
+              <div class="range-slider col-sm-8">
+                <input class="range-slider__range" id="edit_long_min1" name="edit_long_min1" value="" type="range" min="0" max="95"/>
+                <span id="edit_long_min2" name="edit_long_min2" class="range-slider__value"></span>
+              </div>
+            </div>
+      <!--  Long Max  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label m-m" style="text-align: right">Long Max</label>
+              <div class="range-slider col-sm-8">
+                <input class="range-slider__range" id="edit_long_max1" name="edit_long_max1" type="range" value="0" min="0" max="95"/>
+                <span id="edit_long_max2" name="edit_long_max2" class="range-slider__value">0</span>
+              </div>
+            </div>
+      <!--  Short Min  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label m-m" style="text-align: right">Short Min</label>
+              <div class="range-slider col-sm-8">
+                <input class="range-slider__range" id="edit_short_min1" name="edit_short_min1" type="range" value="0" min="0" max="95"/>
+                <span id="edit_short_min2" name="edit_short_min2" class="range-slider__value">0</span>
+              </div>
+            </div>
+      <!--  Short Max  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label m-m" style="text-align: right">Short Max</label>
+              <div class="range-slider col-sm-8">
+                <input class="range-slider__range" id="edit_short_max1" name="edit_short_max1" type="range" value="0" min="0" max="95"/>
+                <span id="edit_short_max2" name="edit_short_max2" class="range-slider__value">0</span>
+              </div>
+            </div>
+      <!--  Symbols -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label" style="text-align: right">Symbols</label>
+              <div class="col-sm-8">
+
+                  <select id='edit_symbol_list' multiple>
+                  </select>
+              </div>
+            </div>
+      <!--  Button  -->
+            <div class="modal-footer">
+              <button type="button" class="btn white p-x-md" style="background-color: #2e3e4e" data-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn white p-x-md" style="background-color: #2e3e4e" >Update</button>
+
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+<div id="add_bot_1" class="modal black-overlay" data-backdrop="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content box-shadow-md black lt m-b">
+        <div class="modal-header">
+      	  <h5 class="modal-title">Create Bot</h5>
+        </div>
+        <div class="modal-body p-lg">
+          <form action="" id="create_bot_form" enctype="multipart/form-data" method="post">{% csrf_token %}
+      <!--  Bot Type  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label text-right" >Data Time Frame</label>
+              <div class="col-sm-8 input-group select2-bootstrap-prepend">
+                <select required name="bot_type" id="bot_type" style="background-color: rgb(72,87,103);" class="form-control">
+                    <option value="paper">Paper Bot</option>
+                    <option value="live">Live Bot</option>
+                </select>
+              </div>
+            </div>
+      <!--   Bot Name  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label" style="text-align: right">Bot Name</label>
+              <div class="col-sm-8">
+                <input type="text" id="bot_name" name="bot_name" class="form-control"  required/>
+              </div>
+            </div>
+      <!--  Strategy  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label" style="text-align: right">Strategy</label>
+              <div class="col-sm-8">
+                <select required name="strategy" id="strategy" style="background-color: rgb(72,87,103);" class="form-control">
+                    {% if strategy_list %}
+                        {% for strategy in strategy_list %}
+                            <option value="{{ strategy.id }}">{{ strategy.name }}</option>
+                        {% endfor %}
+                    {% endif %}
+                </select>
+              </div>
+            </div>
+      <!--  Symbol  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label text-right" >Symbol</label>
+              <div class="col-sm-8 input-group select2-bootstrap-prepend">
+                <select required name="bot_symbol" id="bot_symbol" style="background-color: rgb(72,87,103);" class="form-control">
+                    <option value=""></option>
+                    <option value="DVAX">DVAX</option>
+                    <option value="UNFI">UNFI</option>
+                    <option value="DS">DS</option>
+                    <option value="ABUS">ABUS</option>
+                    <option value="COTY">COTY</option>
+                    <option value="SIG">SIG</option>
+                </select>
+              </div>
+            </div>
+      <!--  Time frame  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label text-right" >Data Time Frame</label>
+              <div class="col-sm-8 input-group select2-bootstrap-prepend">
+                <select required name="bot_time_frame" id="bot_time_frame" style="background-color: rgb(72,87,103);" class="form-control">
+                    <option value=""></option>
+                    <option value="1">1 Minute</option>
+                    <option value="5">5 Minute</option>
+                    <option value="10">10 Minute</option>
+                    <option value="15">15 Minute</option>
+                </select>
+              </div>
+            </div>
+      <!--  Position Close Time  -->
+            <div class="form-group row">
+                <label class="col-sm-4 form-control-label" style="text-align: right">Position Close Time</label>
+                <div class="col-sm-8">
+                    <div class="form-group">
+                        <div class='input-group date' ui-jp="datetimepicker" ui-options="{
+                            format: 'LT',
+                            icons: {
+                                time: 'fa fa-clock-o',
+                                date: 'fa fa-calendar',
+                                up: 'fa fa-chevron-up',
+                                down: 'fa fa-chevron-down',
+                                previous: 'fa fa-chevron-left',
+                                next: 'fa fa-chevron-right',
+                                today: 'fa fa-screenshot',
+                                clear: 'fa fa-trash',
+                                close: 'fa fa-remove'
+                            }
+                        }">
+                        <input type='text' class="form-control" name="close_time" id="close_time"/>
+                        <span class="input-group-addon">
+                            <span class="fa fa-calendar"></span>
+                        </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+      <!--  Cash Amount  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label text-right">Cash Amount(%)</label>
+              <div class="col-sm-8">
+                <input type="text" id="cash_amount" name="cash_amount" class="form-control"  required/>
+              </div>
+            </div>
+      <!--  Margin Amount  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label text-right">Margin Amount(%)</label>
+              <div class="col-sm-8">
+                <input type="text" id="margin_amount" name="margin_amount" class="form-control" min="1" required/>
+              </div>
+            </div>
+
+      <!--  Button  -->
+            <div class="modal-footer">
+              <button type="button" class="btn white p-x-md" style="background-color: #2e3e4e" data-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn white p-x-md" style="background-color: #2e3e4e" >Create</button>
+
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>{% endcomment %}
+
+<div id="add_bot" class="modal black-overlay" data-backdrop="true">
+    <div class="modal-dialog">
+      <div class="modal-content box-shadow-md dark lt m-b">
+        <div class="modal-header">
+      	  <h5 class="modal-title">Create Bot</h5>
+        </div>
+        <div class="modal-body p-lg">
+          <form id="add_bot_form" enctype="multipart/form-data" method="post">{% csrf_token %}
+      <!--  Bot Type  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label text-right" >Bot Type</label>
+              <div class="col-sm-8 input-group select2-bootstrap-prepend">
+                <select required name="new_bot_type" id="new_bot_type" style="background-color: rgb(72,87,103);" class="form-control">
+                    <option value="paper">Paper Bot</option>
+                    <option value="live">Live Bot</option>
+                </select>
+              </div>
+            </div>
+      <!--  Bot Side  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label text-right" >Trading Side</label>
+              <div class="col-sm-8 input-group select2-bootstrap-prepend">
+                <select required name="new_bot_side" id="new_bot_side" style="background-color: rgb(72,87,103);" class="form-control">
+                    <option value="call">Call</option>
+                    <option value="put">Put</option>
+                </select>
+              </div>
+            </div>
+      <!--   Bot Name  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label" style="text-align: right">Bot Name</label>
+              <div class="col-sm-8">
+                <input type="text" id="new_bot_name" name="new_bot_name" class="form-control"  required/>
+              </div>
+            </div>
+      <!--  Symbol  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label text-right" >Symbol</label>
+              <div class="col-sm-8 input-group select2-bootstrap-prepend">
+                <select required name="new_bot_symbol" id="new_bot_symbol" style="background-color: rgb(72,87,103);" class="form-control">
+                    <option value=""></option>
+                    <option value="TSLA">TSLA</option>
+                    <option value="DVAX">DVAX</option>
+                    <option value="UNFI">UNFI</option>
+                    <option value="DS">DS</option>
+                    <option value="ABUS">ABUS</option>
+                    <option value="COTY">COTY</option>
+                    <option value="SIG">SIG</option>
+                </select>
+              </div>
+            </div>
+      <!--  Amount  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label text-right" >Amount(USD)</label>
+              <div class="col-sm-8 input-group select2-bootstrap-prepend">
+                <input type="number" id="new_bot_amount" name="new_bot_amount" class="form-control"  required/>
+              </div>
+            </div>
+    <!--   Entry Group   -->
+            <div>
+              <hr class="h-m-primary">
+                <h5 class="s-p-primary text-primary" >Entry</h5>
+            </div>
+      <!--  Part 1 Strategy  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label" style="text-align: right">Part 1</label>
+              <div class="col-sm-8">
+                <select name="new_bot_entry_strategy_1" id="new_bot_entry_strategy_1" style="background-color: rgb(72,87,103);" class="form-control">
+                    <option value=""></option>
+                    {% if entry_strategy_1 %}
+                        {% for strategy in entry_strategy_1 %}
+                            <option value="{{ strategy.id }}">{{ strategy.name }}</option>
+                        {% endfor %}
+                    {% endif %}
+                </select>
+              </div>
+            </div>
+      <!--  Part 2 Strategy  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label" style="text-align: right">Part 2</label>
+              <div class="col-sm-8">
+                <select name="new_bot_entry_strategy_2" id="new_bot_entry_strategy_2" style="background-color: rgb(72,87,103);" class="form-control">
+                    <option value=""></option>
+                    {% if entry_strategy_2 %}
+                        {% for strategy in entry_strategy_2 %}
+                            <option value="{{ strategy.id }}">{{ strategy.name }}</option>
+                        {% endfor %}
+                    {% endif %}
+                </select>
+              </div>
+            </div>
+      <!--  Part 3 Strategy  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label" style="text-align: right">Part 3</label>
+              <div class="col-sm-8">
+                <select name="new_bot_entry_strategy_3" id="new_bot_entry_strategy_3" style="background-color: rgb(72,87,103);" class="form-control">
+                    <option value=""></option>
+                    {% if entry_strategy_3 %}
+                        {% for strategy in entry_strategy_3 %}
+                            <option value="{{ strategy.id }}">{{ strategy.name }}</option>
+                        {% endfor %}
+                    {% endif %}
+                </select>
+              </div>
+            </div>
+    <!--   Close Group   -->
+            <div>
+              <hr class="h-m-primary">
+                <h5 class="s-p-primary text-danger" >Close</h5>
+            </div>
+      <!--  Part 1 Strategy  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label" style="text-align: right">Part 1</label>
+              <div class="col-sm-8">
+                <select name="new_bot_close_strategy_1" id="new_bot_close_strategy_1" style="background-color: rgb(72,87,103);" class="form-control">
+                    <option value=""></option>
+                    {% if close_strategy_1 %}
+                        {% for strategy in close_strategy_1 %}
+                            <option value="{{ strategy.id }}">{{ strategy.name }}</option>
+                        {% endfor %}
+                    {% endif %}
+                </select>
+              </div>
+            </div>
+      <!--  Part 2 Strategy  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label" style="text-align: right">Part 2</label>
+              <div class="col-sm-8">
+                <select name="new_bot_close_strategy_2" id="new_bot_close_strategy_2" style="background-color: rgb(72,87,103);" class="form-control">
+                    <option value=""></option>
+                    {% if close_strategy_2 %}
+                        {% for strategy in close_strategy_2 %}
+                            <option value="{{ strategy.id }}">{{ strategy.name }}</option>
+                        {% endfor %}
+                    {% endif %}
+                </select>
+              </div>
+            </div>
+      <!--  Part 3 Strategy  -->
+            <div class="form-group row">
+              <label class="col-sm-4 form-control-label" style="text-align: right">Part 3</label>
+              <div class="col-sm-8">
+                <select name="new_bot_close_strategy_3" id="new_bot_close_strategy_3" style="background-color: rgb(72,87,103);" class="form-control">
+                    <option value=""></option>
+                    {% if close_strategy_3 %}
+                        {% for strategy in close_strategy_3 %}
+                            <option value="{{ strategy.id }}">{{ strategy.name }}</option>
+                        {% endfor %}
+                    {% endif %}
+                </select>
+              </div>
+            </div>
+
+      <!--  Button  -->
+            <div class="modal-footer">
+              {% comment %}<button type="button" class="btn white p-x-md" style="background-color: #2e3e4e" data-dismiss="modal">Cancel</button>{% endcomment %}
+              <p class="text-danger" id="error_message"></p>
+              <button type="submit" class="btn white p-x-md" style="background-color: #2e3e4e" >Create</button>
+
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- / .modal -->
+
+
+<!-- ############ PAGE END-->
+
+    </div>
+  </div>
+
+  </div>
+
+<!-- build:js scripts/app.html.js -->
+<!-- jQuery -->
+  <script src="{% static 'user/libs/jquery/jquery/dist/jquery.js' %}"></script>
+<!-- Bootstrap -->
+  <script src="{% static 'user/libs/jquery/tether/dist/js/tether.min.js' %}"></script>
+  <script src="{% static 'user/libs/jquery/bootstrap/dist/js/bootstrap.js' %}"></script>
+<!-- core -->
+  <script src="{% static 'user/libs/jquery/underscore/underscore-min.js' %}"></script>
+  <script src="{% static 'user/libs/jquery/jQuery-Storage-API/jquery.storageapi.min.js' %}"></script>
+  <script src="{% static 'user/libs/jquery/PACE/pace.min.js' %}"></script>
+
+  <script src="{% static 'user/scripts/config.lazyload.js' %}"></script>
+
+  <script src="{% static 'user/scripts/palette.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-load.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-jp.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-include.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-device.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-form.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-nav.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-screenfull.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-scroll-to.js' %}"></script>
+  <script src="{% static 'user/scripts/ui-toggle-class.js' %}"></script>
+
+  <script src="{% static 'user/scripts/app.js' %}"></script>
+
+  <!-- ajax -->
+  <script src="{% static 'user/libs/jquery/jquery-pjax/jquery.pjax.js' %}"></script>
+  <script src="{% static 'user/scripts/ajax.js' %}"></script>
+<!-- endbuild -->
+
+  <script src="https://code.highcharts.com/stock/highstock.js"></script>
+  <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+  <script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
+<script>
+    $(document).ready(function(){
+        $('#add_bot_form').on("submit", function(e){
+            e.preventDefault();
+            console.log("2222222222222222222222");
+            var entry_strategy = [];
+            var close_strategy = [];
+            var type = $('#new_bot_type').val();
+            var side = $("#new_bot_side").val();
+            var name = $('#new_bot_name').val();
+            var symbol = $('#new_bot_symbol').val();
+            var amount = $("#new_bot_amount").val();
+            var csrf_token = $('input[name=csrfmiddlewaretoken]').val();
+            console.log("111111111111111111111111");
+            if ($("#new_bot_entry_strategy_1").val() != "") entry_strategy.push($("#new_bot_entry_strategy_1").val());
+            if ($("#new_bot_entry_strategy_2").val() != "") entry_strategy.push($("#new_bot_entry_strategy_2").val());
+            if ($("#new_bot_entry_strategy_3").val() != "") entry_strategy.push($("#new_bot_entry_strategy_3").val());
+            if ($("#new_bot_close_strategy_1").val() != "") close_strategy.push($("#new_bot_close_strategy_1").val());
+            if ($("#new_bot_close_strategy_2").val() != "") close_strategy.push($("#new_bot_close_strategy_2").val());
+            if ($("#new_bot_close_strategy_3").val() != "") close_strategy.push($("#new_bot_close_strategy_3").val());
+            console.log(entry_strategy);
+            console.log(close_strategy);
+            if (entry_strategy.length === 0 || close_strategy.length === 0) {
+                $("#error_message").html("You have to select 1 entry strategy and 1 close strategy at least");
+            }
+            else {
+                $.ajax({
+                    method: "POST",
+                    url: "/add_bot/",
+                    data: {type: type,side: side, name: name, symbol: symbol, amount: amount, entry_strategy: JSON.stringify(entry_strategy), close_strategy: JSON.stringify(close_strategy), csrfmiddlewaretoken: csrf_token},
+                    success: function(result){
+                        window.location.replace("")
+                    }
+                });
+            };
+
+
+        });
+    });
+  </script>
+<script>
+    function update_bot_status(id, status){
+        var csrf_token = $('input[name=csrfmiddlewaretoken]').val();
+            $.ajax({
+                method: "POST",
+                url: "/update_bot_status/",
+                data: {id: id, status: status, csrfmiddlewaretoken: csrf_token},
+                success: function(result){
+                    window.location.replace("")
+                }
+            });
+    }
+</script>
+<script>
+function createChart(data_list, date_data) {
+
+  Highcharts.stockChart('chart', {
+
+    rangeSelector: {
+      enabled: false,
+
+    },
+    exporting: {
+      enabled: false
+    },
+    yAxis: {
+      labels: {
+        formatter: function () {
+          //return (this.value > 0 ? ' + ' : '') + this.value + '%';
+            return this.value
+        },
+        style: {
+            color: '#000000',
+            fontSize: "15px"
+        },
+      },
+      plotLines: [{
+        value: 0,
+        width: 2,
+        color: 'silver'
+      }]
+    },
+    xAxis: {
+      labels: {
+          //enabled: false
+        formatter: function(){
+            return date_data[this.value];
+        },
+        style: {
+            color: '#000000',
+            fontSize: "15px"
+        },
+        maxStaggerLines: 3
+      }
+    },
+    time: {
+        timezoneOffset: 4 * 60
+    },
+    plotOptions: {
+      series: {
+        //compare: 'percent',
+        showInNavigator: true
+      }
+    },
+
+    tooltip: {
+      //pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change})<br/>',
+      valueDecimals: 2,
+      //split: true
+    },
+    navigator: {
+      xAxis: {
+        labels: {
+          formatter: function(){
+            return date_data[this.value];
+          },
+          style: {
+            color: '#000000',
+            fontSize: "15px"
+        },
+        }
+      }
+    },
+    series: data_list
+    //series: seriesOptions
+  });
+
+}
+
+</script>
+</body>
+</html>

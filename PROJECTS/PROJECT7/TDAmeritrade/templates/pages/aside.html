@@ -1,0 +1,67 @@
+{% load static %}
+<div id="aside" class="app-aside modal nav-dropdown">
+  	<!-- fluid app aside -->
+    <div class="left navside dark dk" data-layout="column">
+  	  <div class="navbar no-radius">
+        <!-- brand -->
+        <a class="navbar-brand">
+        	{% comment %}<div ui-include="'../static/user/assets/images/logo.svg'"></div>{% endcomment %}
+        	{% comment %}<img src="../static/landingpage/img/logo.png" alt="." >{% endcomment %}
+        	<span class="hidden-folded inline text-primary">TD TradingBot</span>
+        </a>
+        <!-- / brand -->
+      </div>
+      <div class="hide-scroll" data-flex>
+          <nav class="scroll nav-light">
+              <ul class="nav" ui-nav>
+                {% comment %}<li class="nav-header hidden-folded">
+                  <small class="text-muted">Main</small>
+                </li>{% endcomment %}
+      <!-- analysis -->
+                <li>
+                  <a href="{% url 'trading' %}" >
+                    <div class="row">
+                      <span class="nav-icon fa fa-dashboard" style="margin-left: 10px">
+                      </span>
+                      <span class="nav-text">Trading</span>
+                    </div>
+                  </a>
+                </li>
+
+      <!-- strategy -->
+                <li>
+                  <a href="{% url 'strategy' %}">
+                    <div class="row">
+                      <span class="nav-icon fa fa-database" style="margin-left: 10px">
+                      </span>
+                      <span class="nav-text">Strategy</span>
+                    </div>
+                  </a>
+                </li>
+      <!-- backtest -->
+                <li>
+                  <a href="{% url 'backtest' %}">
+                    <div class="row">
+                      <span class="nav-icon fa fa-sliders" style="margin-left: 10px">
+                      </span>
+                      <span class="nav-text">Backtest</span>
+                    </div>
+                  </a>
+                </li>
+      <!-- Account -->
+                <li>
+                  <a href="{% url 'account' %}">
+                    <div class="row">
+                      <span class="nav-icon fa fa-user" style="margin-left: 10px">
+                      </span>
+                      <span class="nav-text">Account</span>
+                    </div>
+                  </a>
+                </li>
+
+              </ul>
+          </nav>
+      </div>
+
+    </div>
+  </div>
