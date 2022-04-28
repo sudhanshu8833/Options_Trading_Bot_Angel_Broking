@@ -1,0 +1,15 @@
+parameters,value0,value1
+binance_api_key,G5H5sixYr1dgeip4x43XMe02TIv6CKPluQNkSyTEZcelkfR6XowHXjdThDdP3Qkf,G5H5sixYr1dgeip4x43XMe02TIv6CKPluQNkSyTEZcelkfR6XowHXjdThDdP3Qkf
+binance_api_secret_key,jPWgA6VPV0owVLleUQla2dKXmHpJ44gRf8yUK0Se707DpcqF5YeTDtZpmaDZzT8q,jPWgA6VPV0owVLleUQla2dKXmHpJ44gRf8yUK0Se707DpcqF5YeTDtZpmaDZzT8q
+stop_loss_percentage,95,95
+symbol_binance,BTCUSDT,ETHUSDT
+binance_X,5,5
+time_frame,1m,1m
+minutes,1,1
+left,6,6
+right,5,5
+stoploss,500,50
+takeprofit,500,50
+trailing_after,100,10
+trailing_for,30,3
+bot,on,on

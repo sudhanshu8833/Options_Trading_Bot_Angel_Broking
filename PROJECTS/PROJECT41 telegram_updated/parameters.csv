@@ -1,0 +1,5 @@
+accounts,account1,account2,account3,account4
+portfolio,10,10,10,10
+stoploss,5,10,15,20
+takeprofit,10,15,20,25
+leverage,1,1,1,1

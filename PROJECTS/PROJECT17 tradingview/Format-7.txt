@@ -1,0 +1,37 @@
+webhook_url = https://itsc.pythonanywhere.com/webhookLvuuCCfSBGEJpZEsywxgngrb
+
+message_syntax -
+
+{
+    "PASSPHRASE" : "2#__j7y/PZMC6_z9IV#VQ(VcUr-#T9Vpl74>FO_#__5AWWTXud",
+    "SYMBOL" : "DOGEUSDT",
+    "SIDE" : "{{strategy.order.action}}",
+    "QTY" : 12
+}
+
+
+
+Hello sir, I hope you are fine, I am really glad that the work is complete ......
+
+Setup -Manual
+
+1. You will be able to contact to your bot through the trading view interface...
+
+2. you will be able to change the quantity, symbol through alert message_syntax (mentioned above).
+
+3. You will have to put Webhook_url(mentioned above) in webhook_url section.
+
+4. You will be able to change take profit, and Fractal period through settings of the indicator.
+
+5. In the setting of the indicator there is a option of Strategy Start time, you will have to put the time of the next candle to latest candle, on the timeframe you are using.
+
+	For ex- if in a '15m' time frame latest candle time is shown as 16:45 then in you will have to put 17:00 in Strategy Start time.
+
+
+6. Please keep the https://www.pythonanywhere.com/ account renewed, it charges 5$ per month.
+
+7. Please give the trading permissions in the Binance account through API Management.
+
+8. You can setup multiple alerts on a single trading account.
+
+9. I will request you to watch a tutorial about tradingview webhook alerts if you are completely unaware of it.

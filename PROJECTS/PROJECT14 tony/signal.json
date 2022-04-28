@@ -1,0 +1,50 @@
+{
+  "order_buy": [
+    "buy",
+    "BTCUSDT",
+    "filled",
+    {
+      "symbol_binance": "ETHUSDT",
+      "price": 110,
+      "trailing_for": "30",
+      "trailing_after": "100",
+      "trailing": "off",
+      "order": "long",
+      "stoploss": "500",
+      "takeprofit": "5000",
+      "quantity": 0
+    }
+  ],
+  "order_sell": [
+    "sell",
+    "BTCUSDT",
+    "filled",
+    {
+      "symbol_binance": "BTCUSDT",
+      "price": 1,
+      "trailing_for": "30",
+      "trailing_after": "100",
+      "trailing": "off",
+      "order": "long",
+      "stoploss": "500",
+      "takeprofit": "5000",
+      "quantity": 0
+    }
+  ],
+  "order_close": [
+    "squareoffsell",
+    "BTCUSDT",
+    "filled",
+    {
+      "symbol_binance": "BTCUSDT",
+      "price": 110,
+      "trailing_for": "30",
+      "trailing_after": "100",
+      "trailing": "off",
+      "order": "long",
+      "stoploss": "500",
+      "takeprofit": "5000",
+      "quantity": 0
+    }
+  ]
+}

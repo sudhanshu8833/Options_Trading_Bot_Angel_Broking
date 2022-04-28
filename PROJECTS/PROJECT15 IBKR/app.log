@@ -1,0 +1,77 @@
+INFO - root - 
+        Operating System: darwin
+        Session State Path: /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/ibw/server_session.json
+        Client Portal Folder: /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/resources/clientportal.beta.gw
+        
+DEBUG - root - 
+            Server State: load
+            State File: True
+            
+DEBUG - root - 
+            Server Prcoess Init: None
+            
+DEBUG - parso.cache - pickle loaded: /Users/sudhanshu/Library/Python/3.9/lib/python/site-packages/jedi/third_party/typeshed/stdlib/2and3/builtins.pyi
+DEBUG - parso.cache - pickle loaded: /Users/sudhanshu/Library/Python/3.9/lib/python/site-packages/jedi/third_party/typeshed/stdlib/3/sys.pyi
+INFO - root - Server Process: None
+DEBUG - root - Running Client Folder at: /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/resources/clientportal.beta.gw
+DEBUG - root - 
+            Server State: save
+            State File: True
+            
+INFO - root - 
+        Operating System: darwin
+        Session State Path: /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/ibw/server_session.json
+        Client Portal Folder: /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/resources/clientportal.beta.gw
+        
+DEBUG - root - 
+            Server State: load
+            State File: True
+            
+DEBUG - root - 
+            Server Prcoess Init: None
+            
+INFO - root - Server Process: None
+DEBUG - root - Running Client Folder at: /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/resources/clientportal.beta.gw
+DEBUG - root - 
+            Server State: save
+            State File: True
+            
+DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): localhost:5000
+DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): localhost:5000
+INFO - root - 
+        Operating System: darwin
+        Session State Path: /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/ibw/server_session.json
+        Client Portal Folder: /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/resources/clientportal.beta.gw
+        
+DEBUG - root - 
+            Server State: load
+            State File: True
+            
+DEBUG - root - 
+            Server Prcoess Init: None
+            
+INFO - root - Server Process: None
+DEBUG - root - Running Client Folder at: /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/resources/clientportal.beta.gw
+DEBUG - root - 
+            Server State: save
+            State File: True
+            
+DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): localhost:5000
+INFO - root - 
+        Operating System: darwin
+        Session State Path: /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/ibw/server_session.json
+        Client Portal Folder: /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/resources/clientportal.beta.gw
+        
+DEBUG - root - 
+            Server State: load
+            State File: True
+            
+DEBUG - root - 
+            Server Prcoess Init: 14396
+            
+INFO - root - Server Process: 14396
+DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): localhost:5000
+INFO - root - Server Process: 14396
+DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): localhost:5000
+INFO - root - Server Process: 14396
+DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): localhost:5000
