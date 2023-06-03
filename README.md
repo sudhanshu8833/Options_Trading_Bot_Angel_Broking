@@ -4,8 +4,8 @@
 
 
 
-This is trading App Based on Options. This is fullstack project based on Django, you can host it on your own cloud server so that you can monitor your trades through any device during the day. The description of the strategy is at the end of the Page.
-It is given the strategy has been updated according to the new API changes in **Angel Broking**
+This is a full-stack trading app based on options, developed using Django. The app allows you to host it on your own cloud server, enabling you to monitor your trades from any device throughout the day. The strategy description can be found at the end of the page.
+It is mentioned that the strategy has been updated according to the new API changes in **Angel Broking**.
 
 
 
