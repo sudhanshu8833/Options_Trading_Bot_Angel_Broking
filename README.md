@@ -17,7 +17,6 @@ Procedure To install this on your PC -
  - complete migrations through `python3 manage.py makemigrations` and `python3 manage.py migrate`
  - Run command to start the project `python3 manage.py runserver`
 
-<br>
 ```
 virtualenv env
 source env/bin/activate
