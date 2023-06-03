@@ -18,7 +18,7 @@ It is given the strategy has been updated according to the new API changes in **
 
 
 
-##Procedure To install this on your PC -
+## Procedure To install this on your PC
 
 
  - Make Virtual env `virtualenv env`
