@@ -2,13 +2,19 @@
 
 >Here Algo99 is our company name, On whose name we are building solutions
 
+
+
 This is trading App Based on Options. This is fullstack project based on Django, you can host it on your own cloud server so that you can monitor your trades through any device during the day. The description of the strategy is at the end of the Page.
 It is given the strategy has been updated according to the new API changes in **Angel Broking**
 Procedure To install this on your PC -
 
-<br>
+
+
 
 >This Single Dashboard can be used for all your trading bots at once, just keep adding pages for each bot, and try to have only single page for present positions and order history
+
+
+
 
 
  - Make Virtual env `virtualenv env`
@@ -16,6 +22,8 @@ Procedure To install this on your PC -
  - Install requirements. `pip3 install -r requirements.txt` or `pip install -r requirements.txt`
  - complete migrations through `python3 manage.py makemigrations` and `python3 manage.py migrate`
  - Run command to start the project `python3 manage.py runserver`
+
+
 
 ```
 virtualenv env
@@ -27,7 +35,9 @@ python3 manage.py runserver
 ```
 
 
-<br>
+
+
+
 
 
 1. **Settings page (main page)**
@@ -46,6 +56,8 @@ python3 manage.py runserver
 
 
 2. **current positions page**
+
+
 ![Alt text](https://github.com/sudhanshu8833/Options-Trading-Bot-Angel-Broking-/blob/main/positions.png)
 
   - available at `http://127.0.0.1:8000/option_bot/position/` if you are running on local hosts
@@ -54,6 +66,8 @@ python3 manage.py runserver
 
 
 3. **order history page**
+
+
   - available at `http://127.0.0.1:8000/option_bot/order/` on local host.
   - here also the fields are similar to positions page.
 
