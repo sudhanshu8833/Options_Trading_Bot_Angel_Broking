@@ -31,6 +31,7 @@ python3 manage.py runserver
 
 
 1. **Settings page (main page)**
+<br>
 ![Alt text](https://github.com/sudhanshu8833/Options-Trading-Bot-Angel-Broking-/blob/main/dashboard.png)
 
 
