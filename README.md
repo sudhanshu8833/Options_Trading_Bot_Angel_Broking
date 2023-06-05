@@ -1,6 +1,6 @@
 # Options-Trading-Bot-Angel-Broking-
 
->Here Algo99 is our company name, On whose name we are building solutions
+
 
 
 
