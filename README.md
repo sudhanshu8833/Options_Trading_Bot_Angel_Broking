@@ -82,7 +82,7 @@ python3 manage.py runserver
 
 ## Strategy Explanation
 
->Strategy is strangle stratgy (**calender spread strategy**). Have a basic Idea of this options strategy before getting on the actual strtagy itself.
+>Strategy is short straddle stratgy (**calender spread strategy**). Have a basic Idea of this options strategy before getting on the actual strtagy itself.
 
 
 - selling at 9:20 strike price at entry time. (sell PE / CE current expiry) (recieved preimum is rounded off by 50) (lets call it **max pain**)
