@@ -1,0 +1,30 @@
+{
+    "database":"MT5",
+    "mongo_uri":"mongodb+srv://sudhanshus883:uWZLgUV61vMuWp8n@cluster0.sxyyewj.mongodb.net/?retryWrites=true&w=majority",
+    "ca":"/Users/sid/Desktop/algo-trading/PROFESSIONAL/PROJECT60_MT5/UI/env/lib/python3.11/site-packages/certifi/cacert.pem",
+
+    "default":{
+        "live":true,
+        "lot_size":1,
+        "symbol":"EURUSD",
+        "price":{
+            "bid":1.01,
+            "ask":1.02
+        },
+        "profits":{
+            "day":1.02,
+            "week":9.03,
+            "month":27.04
+        },
+        "pattern":{
+            "pattern1":true,
+            "pattern2":true,
+            "pattern3":false
+        },
+        "theme":"Dark",
+        "scale":"100"
+    }
+
+}
+
+
