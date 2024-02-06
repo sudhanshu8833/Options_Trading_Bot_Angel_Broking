@@ -1,0 +1,22 @@
+Password: Cryptobot!
+Key: 65a8e33d36c65900017502d2
+Secret key: 9930e424-ec27-4d87-a9a5-5db412af3c18
+
+#Login 
+username: bybit_bot
+password: bot_to_trade
+
+
+#Django Admin
+username: keisport
+password: kei1234
+
+
+#Digitalocean
+email - mateboer@jan-lammert.nl
+pass - Oostercluft420!
+
+143.110.241.49
+ssh root@143.110.241.49
+246Madhya
+rsync -av --exclude='env/' --exclude='git/' --exclude='db.sqlite3' --exclude='log/' /Users/sid/Desktop/algo-trading/PROFESSIONAL/PROJECT64_bybit/* root@143.110.241.49:/root/PROJECT/

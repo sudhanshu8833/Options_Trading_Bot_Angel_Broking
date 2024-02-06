@@ -1,0 +1,13 @@
+INFO 2024-02-06 06:06:10,705 strategy 45455 6204665856 Traceback (most recent call last):
+  File "/Users/sid/Desktop/algo-trading/PROFESSIONAL/PROJECT64_bybit/datamanagement/helpful_scripts/strategy.py", line 251, in run
+    self.main()
+  File "/Users/sid/Desktop/algo-trading/PROFESSIONAL/PROJECT64_bybit/datamanagement/helpful_scripts/strategy.py", line 231, in main
+    signal=self.signals(ticker,df)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sid/Desktop/algo-trading/PROFESSIONAL/PROJECT64_bybit/datamanagement/helpful_scripts/strategy.py", line 187, in signals
+    if(not self.is_position(instrument)):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sid/Desktop/algo-trading/PROFESSIONAL/PROJECT64_bybit/datamanagement/helpful_scripts/strategy.py", line 157, in is_position
+    for pos in position:
+TypeError: 'Collection' object is not iterable
+
