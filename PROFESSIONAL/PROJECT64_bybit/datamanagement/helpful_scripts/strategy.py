@@ -84,9 +84,6 @@ class run_strategy():
             'enableRateLimit': True
         })
 
-    def write_json(self):
-        with open("datamanagement/helpful_scripts/intermediate.json","w") as json_file:
-            json.dump(data,) 
 
     def update_candles(self,df):
         data_structure = [
@@ -205,8 +202,8 @@ class run_strategy():
                     if(pos['current_price']>=pos['take_profit'] or pos['current_price']<=pos['stoploss']):
 
                         pos['status']='CLOSED'
-
-
+                        pos['time_end']=datetime.now()
+                        pos['price_out']=pos['current_prices']
                         if (self.admin['live']):
                             self.create_order(pos)
 
@@ -215,6 +212,9 @@ class run_strategy():
                     if(pos['current_price']<=pos['take_profit'] or pos['current_price']>=pos['stoploss']):
 
                         pos['status']="CLOSED"
+                        pos['time_end']=datetime.now()
+                        pos['price_out']=pos['current_prices']
+                        
                         if (self.admin['live']):
                             self.create_order(pos)
 

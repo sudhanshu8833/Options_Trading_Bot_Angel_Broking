@@ -48,9 +48,8 @@ function updateClosedContents(positions) {
             '<td>' + pos.time_start + '</td>' +
             '<td>' + pos.price_in + '</td>' +
             '<td style="color: ' + (pos.type =="SHORT" ? 'rgb(216, 25, 25)' : 'rgb(21, 214, 21)') + ';">' + pos.type + '</td>' +
-            '<td>' + pos.current_price + '</td>' +
-            '<td>' + pos.stoploss + '</td>' +
-            '<td>' + pos.take_profit + '</td>' +
+            '<td>' + pos.time_end + '</td>' +
+            '<td>' + pos.price_out + '</td>' +
             '<td>' + pos.quantity + '</td>' +
             '<td style="color: ' + (pos.pnl < 0 ? 'rgb(216, 25, 25)' : 'rgb(21, 214, 21)') + ';">' + pos.pnl + '</td>'  +
             '</tr>';
